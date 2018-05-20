@@ -1,4 +1,4 @@
-package main.scala.de.htwg.se.DogGame.view.tui
+package main.scala.de.htwg.se.DogGame.view
 
 case class Tui() {
   
