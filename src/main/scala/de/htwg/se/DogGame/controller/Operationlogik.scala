@@ -2,7 +2,7 @@ package main.scala.de.htwg.se.DogGame.controller
 
 import main.scala.de.htwg.se.DogGame.model.Spieler
 import main.scala.de.htwg.se.DogGame.model.Lauffeld
-import main.scala.de.htwg.se.DogGame.view.tui.Tui
+import main.scala.de.htwg.se.DogGame.view.Tui
 import main.scala.de.htwg.se.DogGame.model.Spielbrett
 import main.scala.de.htwg.se.DogGame.model.Spielfigur
 import main.scala.de.htwg.se.DogGame.controller.{ Benutzerinput => us_in }

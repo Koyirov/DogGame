@@ -7,7 +7,7 @@ case class Startspiel() {
   import _root_.main.scala.de.htwg.se.DogGame.model.Karten
   import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
   import _root_.main.scala.de.htwg.se.DogGame.model.Spielbrett
-  import _root_.main.scala.de.htwg.se.DogGame.view.tui.Tui
+  import _root_.main.scala.de.htwg.se.DogGame.view.Tui
   import _root_.main.scala.de.htwg.se.DogGame.controller.{ Operationlogik => op_log }
   import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
 
