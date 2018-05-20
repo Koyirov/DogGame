@@ -247,7 +247,8 @@ case class Startspiel() {
               } else {
               
                 // kartenlogik ausfuehren
-                if (op_log().ausfuehren(laufFeld, sK, players(sp), players, spBrett)) {
+                
+                if (op_log().ausfuehren14(laufFeld, sK, players(sp), players, spBrett)) {
 
                   players(sp).delKarte(sK)
                   legit = true
