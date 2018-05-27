@@ -8,10 +8,12 @@ case class Startspiel() {
   import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
   import _root_.main.scala.de.htwg.se.DogGame.model.Spielbrett
   import _root_.main.scala.de.htwg.se.DogGame.view.Tui
+  import _root_.main.scala.de.htwg.se.DogGame.view.SwingGui
   import _root_.main.scala.de.htwg.se.DogGame.controller.{ Operationlogik => op_log }
   import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
 
   var tuiIns = Tui()
+  var guiIns = SwingGui
   //var revert7 = false
 
   // Alle Lauffelder mit spBrett.get_spiel_Lauf_Feld() ersetzt
@@ -71,7 +73,8 @@ case class Startspiel() {
           // Alle Felder uebersichtlich ausgeben
           //println("**alle felder ausgeben**")
           tuiIns.tui_v1(laufFeld, players)
-
+          guiIns.update_Spiel_Brett(laufFeld, players)
+          
           // checken ob mind. eine karte moeglich
 
           //startkarte
