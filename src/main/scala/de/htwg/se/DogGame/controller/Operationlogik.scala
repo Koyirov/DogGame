@@ -6,6 +6,7 @@ import main.scala.de.htwg.se.DogGame.view.Tui
 import main.scala.de.htwg.se.DogGame.model.Spielbrett
 import main.scala.de.htwg.se.DogGame.model.Spielfigur
 import main.scala.de.htwg.se.DogGame.controller.{ Benutzerinput => us_in }
+import main.scala.de.htwg.se.DogGame.controller.Startspiel
 
 case class Operationlogik() {
 
@@ -18,6 +19,9 @@ case class Operationlogik() {
       var check2 = false
       while (check2 == false) {
         println("Waehlen Sie eine Karte aus die der Joker sein soll.")
+        //if(guiBoolean){
+          
+        //}
         var optStr = Benutzerinput().karte_waehlen()
 
         while (optStr == None || optStr.get == 14) {

@@ -1,6 +1,6 @@
 package main.scala.de.htwg.se.DogGame.controller
 
-case class Startspiel() {
+case class Startspiel(guiBoolean: Boolean) {
 
   import scala.collection.mutable.ArrayBuffer
   import _root_.main.scala.de.htwg.se.DogGame.model.Spieler
@@ -13,7 +13,8 @@ case class Startspiel() {
   import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
 
   var tuiIns = Tui()
-  var guiIns = SwingGui
+  var guiIns = new SwingGui()
+ 
   //var revert7 = false
 
   // Alle Lauffelder mit spBrett.get_spiel_Lauf_Feld() ersetzt
@@ -29,11 +30,14 @@ case class Startspiel() {
 
     // init spieler
     println("Wieviele Spieler spielen?")
+    if(guiBoolean){
+      guiIns.frame_comp.textLabel.text_=("Wieviele Spieler spielen?")
+    }
 
     var anzSpieler = 0
     var cor = false
 
-    anzSpieler = Benutzerinput().anz_Spieler_waehlen()
+    anzSpieler = Benutzerinput(guiBoolean).anz_Spieler_waehlen()
 
     // default- 1 to 4
     addSpieler(players, anzSpieler)
@@ -64,7 +68,6 @@ case class Startspiel() {
       // karten mit partner tauschen
 
       tauscheKarte(players)
-
       // spiel ...
       var rundenEnde = false
       while (!rundenEnde) {
@@ -243,20 +246,20 @@ case class Startspiel() {
     for (sp <- 0 to players.length - 1) {
 
       var tKart = "0"
-      var tk = Benutzerinput().StrToIntK(tKart)
+      var tk = Benutzerinput(guiBoolean).StrToIntK(tKart)
       var check = false
       while (check == false) {
         println(players(sp).getName() + ", Waehlen Sie eine Karte zum tauschen aus!")
         println(players(sp).getKartenAusgabe())
         tKart = scala.io.StdIn.readLine()
 
-        tk = Benutzerinput().StrToIntK(tKart)
+        tk = Benutzerinput(guiBoolean).StrToIntK(tKart)
 
         while (tk == None) {
           println(players(sp).getName() + ", Waehlen Sie eine Karte zum tauschen aus!")
           println(players(sp).getKartenAusgabe())
           tKart = scala.io.StdIn.readLine()
-          tk = Benutzerinput().StrToIntK(tKart)
+          tk = Benutzerinput(guiBoolean).StrToIntK(tKart)
         }
 
         //checken ob karte da ist
@@ -352,11 +355,11 @@ case class Startspiel() {
     }
     //auswaehlen + loeschen
     println("Waehle eine Karte zum Spielen aus.")
-    var spKart = Benutzerinput().karte_waehlen()
+    var spKart = Benutzerinput(guiBoolean).karte_waehlen()
     while (spKart == None || (!players(sp).getKarten().contains(spKart.get) && spKart.get != 0)) {
       println("Du hast nicht diese Karte.")
       println("Waehle eine Karte zum Spielen aus.")
-      spKart = Benutzerinput().karte_waehlen()
+      spKart = Benutzerinput(guiBoolean).karte_waehlen()
     }
     // spkart.get ist gecheckt
     var sK = spKart.get

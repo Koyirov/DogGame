@@ -1,6 +1,6 @@
 package main.scala.de.htwg.se.DogGame.controller
 
-case class Benutzerinput(){
+case class Benutzerinput(guiBoolean: Boolean){
   
   def figur_waehlen(): Int = {
     var check1 = false
