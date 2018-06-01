@@ -132,20 +132,6 @@ class Spieler(id: Int, st: Int) {
   def getStartPos(): Int = {
     return startPos
   }
-
-  def getFigPos(fig: Spielfigur): Int = {
-    var pos = 1
-    if (start.isEmpty)
-      return pos
-    for (f <- start) {
-
-      if (f._2 != pos) {
-        return pos
-      }
-      pos += 1
-    }
-    return pos
-  }
   
   def alleImZiel(): Boolean = {
     
