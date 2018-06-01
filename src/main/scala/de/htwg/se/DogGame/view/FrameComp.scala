@@ -13,7 +13,7 @@ class FrameComp{
   
   var lf_buttons = collection.mutable.Map[Int, Button]()
   var sp_st_zi_fl = collection.mutable.Map[String, (ArrayBuffer[Button], ArrayBuffer[Button])]()
-  var ok_button = new Button()
+  var sp_karten = collection.mutable.Map[String, ArrayBuffer[Button]]()
   
   val s = new Dimension(25, 25)
   val ks = new Dimension(30, 45)
@@ -534,9 +534,27 @@ class FrameComp{
     preferredSize = ks
     border = Swing.EmptyBorder(0, 0, 0, 0)
   }
+  
+  // 4 button fuer zeiger
+  var buttonZ1 = new Button() {
+    preferredSize = ks
+    border = Swing.EmptyBorder(0, 0, 0, 0)
+  }
+  var buttonZ2 = new Button() {
+    preferredSize = ks
+    border = Swing.EmptyBorder(0, 0, 0, 0)
+  }
+  var buttonZ3 = new Button() {
+    preferredSize = ks
+    border = Swing.EmptyBorder(0, 0, 0, 0)
+  }
+  var buttonZ4 = new Button() {
+    preferredSize = ks
+    border = Swing.EmptyBorder(0, 0, 0, 0)
+  }
   //button5.setBorder(null);
 
-  //TODO: set button card text
+  //set button card text
   
   button1.text_=("*")
   button2.text_=("*")
@@ -646,6 +664,19 @@ class FrameComp{
   
   buttonB6.text_=(" ")
   
+  var b_karten  = new ArrayBuffer[Button]()
+  b_karten += buttonB1 += buttonB2 += buttonB3 += buttonB4 += buttonB5 += buttonB6 += buttonZ1
+  
+  var r_karten  = new ArrayBuffer[Button]()
+  r_karten += buttonR1 += buttonR2 += buttonR3 += buttonR4 += buttonR5 += buttonR6 += buttonZ2
+  
+  var g_karten  = new ArrayBuffer[Button]()
+  g_karten += buttonG1 += buttonG2 += buttonG3 += buttonG4 += buttonG5 += buttonG6 += buttonZ3
+  
+  var s_karten  = new ArrayBuffer[Button]()
+  s_karten += buttonS1 += buttonS2 += buttonS3 += buttonS4 += buttonS5 += buttonS6 += buttonZ4
+  
+  sp_karten += ("B" -> b_karten) += ("R" -> r_karten) += ("G" -> g_karten) += ("S" -> s_karten)
   
   var panel20 = new FlowPanel(FlowPanel.Alignment.Left)(button93, button94, button95, button96) //4
   var s_ziel  = new ArrayBuffer[Button]()
@@ -810,6 +841,7 @@ class FrameComp{
   //textLabel.horizontalTextPosition
   textLabel.text_=("Hier Kommt alle Hinweise, Warnungen und Fragen")
   //var textPanel = new FlowPanel(textField) 
+  
   var nutzerEingabe = new swing.TextArea()
   nutzerEingabe.preferredSize_=(new Dimension(250,25))
   nutzerEingabe.name_=("Benutzereingaben")
@@ -818,24 +850,37 @@ class FrameComp{
     border = Swing.EmptyBorder(0, 0, 0, 0)
   }
   buttonOk.text_=("Ok")
-  ok_button = buttonOk
+  
+  var textHinweis = new swing.TextArea()
+  textHinweis.preferredSize_=(new Dimension(250, 100))
+  textHinweis.lineWrap_=(true)
+	textHinweis.wordWrap_=(true)
+	textHinweis.editable_=(false)
+	textHinweis.background_=(panelGround.background)
+  textHinweis.text_=("Hinweis:\nAss = 1, Bube = 11, Dame = 12, \nKoenig = 13, Joker = 14, \n0 = keine moegliche\n")
+  
   var buttonOkPanel = new FlowPanel(buttonOk)
   var nutzerEingabePanel = new FlowPanel(nutzerEingabe)
   var textLabelPanel = new FlowPanel(textLabel)
-  var textEingPan = new GridPanel(3, 1)
-  textEingPan.preferredSize_=(new Dimension(250, 400))
-  textEingPan.contents += textLabelPanel += nutzerEingabePanel += buttonOkPanel
+  var textHinweisPanel = new FlowPanel(textHinweis)
+  
+  var textEingPan = new GridPanel(4, 1)
+  textEingPan.preferredSize_=(new Dimension(250, 500))
+  textEingPan.contents += textLabelPanel += nutzerEingabePanel += buttonOkPanel += textHinweisPanel
+  
   /*Panel fuer Spieler Karten, besteht aus 3 Panels*/
-  var erstSpKart = new FlowPanel(buttonB1, buttonB2, buttonB3, buttonB4, buttonB5, buttonB6)
-  var zweiSpKart = new FlowPanel(buttonR1, buttonR2, buttonR3, buttonR4, buttonR5, buttonR6)
-  var dritSpKart = new FlowPanel(buttonG1, buttonG2, buttonG3, buttonG4, buttonG5, buttonG6)
-  var vierSpKart = new FlowPanel(buttonS1, buttonS2, buttonS3, buttonS4, buttonS5, buttonS6)
+  var erstSpKart = new FlowPanel(buttonB1, buttonB2, buttonB3, buttonB4, buttonB5, buttonB6, buttonZ1)
+  var zweiSpKart = new FlowPanel(buttonR1, buttonR2, buttonR3, buttonR4, buttonR5, buttonR6, buttonZ2)
+  var dritSpKart = new FlowPanel(buttonG1, buttonG2, buttonG3, buttonG4, buttonG5, buttonG6, buttonZ3)
+  var vierSpKart = new FlowPanel(buttonS1, buttonS2, buttonS3, buttonS4, buttonS5, buttonS6, buttonZ4)
   var spKarten = new GridPanel(4, 1)
   spKarten.preferredSize_=(new Dimension(250, 400))
   spKarten.xLayoutAlignment_=(0)
   spKarten.contents += erstSpKart += zweiSpKart += dritSpKart += vierSpKart
   
   //lazy val ui = new GridPanel(panelGround)
-  lazy val ui = new FlowPanel(textEingPan, panelGround, spKarten)
+  var spiel_brett = new FlowPanel(textEingPan, panelGround, spKarten)
+  //spiel_brett.background_=(java.awt.Color.darkGray)
+  lazy val ui = spiel_brett
  
 }
