@@ -5,10 +5,11 @@ import main.scala.de.htwg.se.DogGame.model.Lauffeld
 import main.scala.de.htwg.se.DogGame.view.Tui
 import main.scala.de.htwg.se.DogGame.model.Spielbrett
 import main.scala.de.htwg.se.DogGame.model.Spielfigur
-import main.scala.de.htwg.se.DogGame.controller.{ Benutzerinput => us_in }
-import main.scala.de.htwg.se.DogGame.controller.Startspiel
+import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
+import main.scala.de.htwg.se.DogGame.view.SwingGui
+//import main.scala.de.htwg.se.DogGame.controller.Startspiel
 
-case class Operationlogik() {
+case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
 
   import scala.collection.mutable.ArrayBuffer
 
@@ -17,16 +18,23 @@ case class Operationlogik() {
     if (karte == 14) {
       var kart = 0
       var check2 = false
+      var gui_prefix = ""
       while (check2 == false) {
-        println("Waehlen Sie eine Karte aus die der Joker sein soll.")
+        println("Waehle eine Karte aus die der Joker sein soll.")
+        if (guiBoolean) {
+          guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Karte aus die der Joker sein soll.")
+        }
         //if(guiBoolean){
-          
+
         //}
-        var optStr = Benutzerinput().karte_waehlen()
+        //TODO: Benutzerinput(true) zu guiBoolean aendern
+        var optStr = Benutzerinput(guiBoolean, guiIns).karte_waehlen()
 
         while (optStr == None || optStr.get == 14) {
-          println("Falsche Eingabe! Waehlen Sie eine Karte aus, die der Joker sein soll.")
-          optStr = Benutzerinput().karte_waehlen()
+          println("Falsche Eingabe! Waehle eine Karte aus, die der Joker sein soll.")
+          gui_prefix = "Falsche Eingabe!\n"
+          //TODO
+          optStr = Benutzerinput(guiBoolean, guiIns).karte_waehlen()
 
         }
         //get ist gecheckt
@@ -36,6 +44,7 @@ case class Operationlogik() {
         }
         if (!check2) {
           println("Diese Karte gibt es nicht.")
+          gui_prefix="Diese Karte gibt es nicht."
         }
 
       }
@@ -43,27 +52,35 @@ case class Operationlogik() {
     }
     return ausfuehren(lF, karteE, spieler, alleSp, spBrett)
   }
-  
+
   def ausfuehren(lF: Lauffeld, karte: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
 
-    var tmp = spieler.getName() + us_in().figur_waehlen()
+    var tmp = spieler.getName() + Benutzerinput(guiBoolean, guiIns).figur_waehlen()
     var fig = spieler.getFig(tmp)
 
     karte match {
       case 0 => { // keine moegliche karte Etwas lief falsch
 
         println("Es gibt keine ausspielbare Karte.")
+        if (guiBoolean) {
+          guiIns.frame_comp.textLabel.text_=("Es gibt keine ausspielbare Karte.")
+        }
         return true
       }
       case 1 => { // ASS
-        
+
         // optionen bestimmen
         var opt = -1
         do {
           println("0 -> Aus Startfeld rausgehen.")
           println("1 -> 1 Schritt im Lauffeld weiter laufen.")
           println("11 -> 11 Schritte im Lauffeld weiter laufen.")
-          opt = us_in().opt_waehlen()
+          val ausg = "0 -> Aus Startfeld rausgehen.\n" + 
+          "1 -> 1 Schritt im Lauffeld weiter laufen.\n" + 
+          "11 -> 11 Schritte im Lauffeld weiter laufen."
+          
+          //TODO:
+          opt = Benutzerinput(guiBoolean, guiIns).opt_waehlen(ausg)
         } while (opt != 0 && opt != 11 && opt != 1)
 
         if (opt == 0) {
@@ -72,17 +89,19 @@ case class Operationlogik() {
           return laufenN(lF, fig, opt, spieler, alleSp)
         }
 
-       
       }
-      
+
       case 4 => {
-        
+
         // optionen bestimmen
         var opt = -1
         do {
           println("14 -> 4 Schritte im Lauffeld Rueckwaerts laufen.")
           println("4 -> 4 Schritte im Lauffeld weiter laufen.")
-          opt = us_in().opt_waehlen()
+          val ausg = "14 -> 4 Schritte im Lauffeld Rueckwaerts laufen.\n" + 
+          "4 -> 4 Schritte im Lauffeld weiter laufen."
+          //TODO:
+          opt = Benutzerinput(guiBoolean, guiIns).opt_waehlen(ausg)
         } while (opt != 14 && opt != 4)
 
         if (opt == 14) {
@@ -90,7 +109,7 @@ case class Operationlogik() {
         } else {
           return laufenN(lF, fig, opt, spieler, alleSp)
         }
-        
+
       }
       case 7 => {
 
@@ -108,26 +127,29 @@ case class Operationlogik() {
           }
 
           if (i != 7) {
-            var tmp = spieler.getName() + us_in().figur_waehlen()
+            var tmp = spieler.getName() + Benutzerinput(guiBoolean, guiIns).figur_waehlen()
             fig = spieler.getFig(tmp)
           }
         }
         return true
       }
-      
+
       case 11 => { // Bube
-        
+
         return laufen15(lF, fig, spieler, alleSp)
       }
-      
+
       case 13 => { // Koenig
-        
+
         // optionen bestimmen
         var opt = -1
         do {
           println("0 -> Aus Startfeld rausgehen.")
           println("13 -> 13 Schritte im Lauffeld weiter laufen.")
-          opt = us_in().opt_waehlen()
+          val ausg = "0 -> Aus Startfeld rausgehen.\n" + 
+          "13 -> 13 Schritte im Lauffeld weiter laufen."
+          //TODO:
+          opt = Benutzerinput(guiBoolean, guiIns).opt_waehlen(ausg)
         } while (opt != 0 && opt != 13)
 
         if (opt == 0) {
@@ -135,8 +157,6 @@ case class Operationlogik() {
         } else {
           return laufenN(lF, fig, opt, spieler, alleSp)
         }
-
-       
 
       }
       case _ => { // der rest - normale karten: 2,3,5,6,8,9,10,12
@@ -162,12 +182,11 @@ case class Operationlogik() {
     // setze in zielSpieler.start
     for (sp <- alleSp) {
       if (fig.getFigur().startsWith(sp.getName())) {
-        sp.start += ((fig, sp.getFigPos(fig)))
+        sp.start += ((fig, fig.getFigur().charAt(1)))
       }
     }
-
   }
- 
+
   def lFIstFrei(lF: Lauffeld, p: ArrayBuffer[Spieler], pos: Int): Boolean = {
 
     var l = lF.getFeld().clone().map(_.swap)
@@ -191,6 +210,9 @@ case class Operationlogik() {
 
     if (!spieler.delFigur(figur)) {
       println("Etwas lief falsch - keine Figur geloescht")
+      if (guiBoolean) {
+        guiIns.frame_comp.textLabel.text_=("Etwas lief falsch - keine Figur geloescht")
+      }
       return false
     }
     if (lF.posBelegt(spieler.getStartPos())) {
@@ -212,6 +234,9 @@ case class Operationlogik() {
 
       if (!lFIstFrei(lF, alleSp, erg)) {
         println("Blockiert durch StartFigur")
+        if (guiBoolean) {
+          guiIns.frame_comp.textLabel.text_=("Blockiert durch StartFigur")
+        }
         return false
       }
 
@@ -254,6 +279,9 @@ case class Operationlogik() {
           spieler.ziel += ((figur, pos.get + 1))
         } else {
           println("Figur kann sich nicht mehr laufen!")
+          if (guiBoolean) {
+            guiIns.frame_comp.textLabel.text_=("Figur kann sich nicht mehr laufen!")
+          }
           return false
         }
 
@@ -263,7 +291,9 @@ case class Operationlogik() {
       return false
     }
     // tui anzeigen
+    //TODO:
     Tui().tui_v1(lF, alleSp)
+    guiIns.update_Spiel_Brett(lF, alleSp, spieler.getId())
     return true
   }
 
@@ -288,6 +318,9 @@ case class Operationlogik() {
     } else {
       //Figur nicht im Lauffeld
       println("Figur nicht im Lauffeld: bitte nochmal eingeben");
+      if (guiBoolean) {
+        guiIns.frame_comp.textLabel.text_=("Figur nicht im Lauffeld: bitte nochmal eingeben")
+      }
       return false
     }
 
@@ -305,8 +338,12 @@ case class Operationlogik() {
       return false
     /*Tauschen mit Figuren, die sich im Lauffeld befinden.*/
     println("Figur von andere Spieler waehlen! (z.B. R1)");
+    if (guiBoolean) {
+        guiIns.frame_comp.textLabel.text_=("Figur von andere Spieler waehlen! (z.B. R1)")
+    }
     //var fig2 = spieler.getFigur(us_in().spFigur_waehlen())
-    var fig_name = us_in().spFigur_waehlen()
+    //TODO:
+    var fig_name = Benutzerinput(guiBoolean, guiIns).spFigur_waehlen()
     var fig2 = new Spielfigur("z1")
     for (sp <- alleSp) {
       if (fig_name.startsWith(sp.getName())) {
@@ -318,7 +355,12 @@ case class Operationlogik() {
     while ((fig2 == null) || (!lF.getFeld().contains(fig2) && !fig2.getFigur().startsWith(spieler.getName()))) {
       println("Diese Figur kann man nicht tauschen.")
       println("Figur von anderem Spieler waehlen! (z.B. R1)");
-      fig_name = us_in().spFigur_waehlen()
+      if (guiBoolean) {
+        guiIns.frame_comp.textLabel.text_=("Diese Figur kann man nicht tauschen.\n" + 
+            "Figur von anderem Spieler waehlen! (z.B. R1)")
+      }
+      //TODO:
+      fig_name = Benutzerinput(guiBoolean, guiIns).spFigur_waehlen()
       for (sp <- alleSp) {
         if (fig_name.startsWith(sp.getName())) {
           fig2 = sp.getFig(sp.getName())
@@ -329,6 +371,9 @@ case class Operationlogik() {
 
     if (lF.getFeld().get(figur) == None || lF.getFeld().get(fig2) == None) {
       println("Entweder falsche Figur gewählt oder falsche Name eingegeben!")
+      if (guiBoolean) {
+        guiIns.frame_comp.textLabel.text_=("Entweder falsche Figur gewählt oder falsche Name eingegeben!")
+      }
       return false
     }
     // get erledigt
@@ -355,6 +400,9 @@ case class Operationlogik() {
         var s = i % 64
         if (!lFIstFrei(lF, alleSp, s)) {
           println("Diese Figur ist blockiert.")
+          if (guiBoolean) {
+            guiIns.frame_comp.textLabel.text_=("Diese Figur ist blockiert.")
+          }
           return false
         }
       }
@@ -377,6 +425,9 @@ case class Operationlogik() {
           spieler.ziel += ((figur, zielPos))
         } else {
           println("Zielfeld nicht erreichbar!")
+          if (guiBoolean) {
+            guiIns.frame_comp.textLabel.text_=("Zielfeld nicht erreichbar!")
+          }
           return false
         }
       } else {
@@ -393,6 +444,9 @@ case class Operationlogik() {
 
       if (pos == None) {
         println("Figur nicht gefunden.")
+        if (guiBoolean) {
+          guiIns.frame_comp.textLabel.text_=("Figur nicht gefunden.")
+        }
         return false
       }
       var schritt = 4 - pos.get
@@ -410,6 +464,9 @@ case class Operationlogik() {
           spieler.ziel += ((figur, pos.get + schritt))
         } else {
           println("Figur kann sich nicht mehr laufen!")
+          if (guiBoolean) {
+            guiIns.frame_comp.textLabel.text_=("Figur kann sich nicht mehr laufen!")
+          }
           return false
         }
 
@@ -417,6 +474,9 @@ case class Operationlogik() {
     } else {
       // Figur nicht im Lauffeld , Figur ist nicht im Zielfeld -> Figur im Startfeld
       println("Diese Figur ist im Startfeld.")
+      if (guiBoolean) {
+        guiIns.frame_comp.textLabel.text_=("Diese Figur ist im Startfeld.")
+      }
       return false
     }
     return true
