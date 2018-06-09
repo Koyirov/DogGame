@@ -31,9 +31,10 @@ case class Startspiel(guiBoolean: Boolean) {
     var spBrett = Spielbrett()
 
     // init spieler
-    println("Wieviele Spieler spielen?")
     if (guiBoolean) {
       guiIns.frame_comp.textLabel.text_=("Wieviele Spieler spielen?")
+    } else {
+      println("Wieviele Spieler spielen?")
     }
 
     var anzSpieler = 0
@@ -69,7 +70,7 @@ case class Startspiel(guiBoolean: Boolean) {
 
       // karten mit partner tauschen
 
-      tauscheKarte(players)
+      tauscheKarte(players, laufFeld)
       // spiel ...
       var rundenEnde = false
       while (!rundenEnde) {
@@ -78,7 +79,8 @@ case class Startspiel(guiBoolean: Boolean) {
           // Alle Felder uebersichtlich ausgeben
           //println("**alle felder ausgeben**")
           tuiIns.tui_v1(laufFeld, players)
-          guiIns.update_Spiel_Brett(laufFeld, players, turn)
+          //TODO: turn
+          guiIns.update_Spiel_Brett(laufFeld, players, sp + 1)
 
           // checken ob mind. eine karte moeglich
 
@@ -98,9 +100,10 @@ case class Startspiel(guiBoolean: Boolean) {
           // gui_ausgabe ist fuer hinweis ausgabe bei gui
           var gui_ausgabe = ""
           if (!checkSt) {
-            println("Keine mögliche Startkarte vorhanden.")
-            gui_ausgabe = "Keine mögliche Startkarte vorhanden.\n"
-
+            if (!guiBoolean) {
+              println("Keine moegliche Startkarte vorhanden.")
+            }
+            gui_ausgabe = "Keine moegliche Startkarte vorhanden.\n"
           }
 
           // Blokierte Spielfelder
@@ -108,11 +111,12 @@ case class Startspiel(guiBoolean: Boolean) {
 
           var checkBl = false
           /*Hier wird ausgegeben die kleinste Karte von Spielers Karte und die großte
-           Laufmöglichkeit Abstand von alle Figuren, die im Lauffeld stehen*/
+           Laufmoeglichkeit Abstand von alle Figuren, die im Lauffeld stehen*/
           if (!(players(sp).getAnzKart() == 0) && players(sp).getStart().size != 4) {
             val klKart = players(sp).getkleinsteKarte()
-            println("bestePosforallFig: " + bestePos + " klKart: " + klKart)
-            
+            if (!guiBoolean) {
+              println("bestePosforallFig: " + bestePos + " klKart: " + klKart)
+            }
             if (bestePos == 0) {
               // keine figur auf dem spielfeld
               checkBl = true
@@ -121,8 +125,10 @@ case class Startspiel(guiBoolean: Boolean) {
               checkBl = true
 
             if (!checkBl) {
-              println("Keine mögliche Figur vorhanden!(Blockiert)")
-              gui_ausgabe += "Keine mögliche Figur vorhanden!(Blockiert)\n"
+              if (!guiBoolean) {
+                println("Keine moegliche Figur vorhanden!(Blockiert)")
+              }
+              gui_ausgabe += "Keine moegliche Figur vorhanden!(Blockiert)\n"
             }
           }
 
@@ -152,21 +158,25 @@ case class Startspiel(guiBoolean: Boolean) {
           }
 
           if (!andere && allB) {
-            println("Keine mögliche Figur vorhanden!(alle Buben)(keine andere Figur)")
-            gui_ausgabe += "Keine mögliche Figur vorhanden!(alle Buben)(keine andere Figur)\n"
-            
+            if (!guiBoolean) {
+              println("Keine moegliche Figur vorhanden!(alle Buben)(keine andere Figur)")
+            }
+            gui_ausgabe += "Keine moegliche Figur vorhanden!(alle Buben)(keine andere Figur)\n"
+
           }
           /* ueberfluessig, da schon bei startkarte gecheckt
           if (!km && allB) {
-            println("Keine mögliche Figur vorhanden!(alle Buben)(keine eigene Figur)")
+            println("Keine moegliche Figur vorhanden!(alle Buben)(keine eigene Figur)")
           }*/
 
           // im ziel blockiert
           var bl = zielBlockiert(sp, players)
 
           if (bl) {
-            println("Keine mögliche Figur vorhanden!(alle Blockiert)")
-            gui_ausgabe += "Keine mögliche Figur vorhanden!(alle Blockiert)\n"
+            if (!guiBoolean) {
+              println("Keine moegliche Figur vorhanden!(alle Blockiert)")
+            }
+            gui_ausgabe += "Keine moegliche Figur vorhanden!(alle Blockiert)\n"
           }
           // evtl andere faelle ?
 
@@ -174,10 +184,12 @@ case class Startspiel(guiBoolean: Boolean) {
 
           if (!checkSt && !checkBl && ((km || !andere)) && bl) {
             players(sp).delAllKarte()
-            println("Keine Karte zum Spielen: alle Karten wurden abgeworfen")
+            if (!guiBoolean) {
+              println("Keine Karte zum Spielen: alle Karten wurden abgeworfen")
+            }
             gui_ausgabe += "Keine Karte zum Spielen: alle Karten wurden abgeworfen\n"
           }
-          
+
           /*legit verwendet, um Spieler zu wechseln, wenn sein Schritt(ausfuehren) erfolgreich war*/
           var legit = false
           var gui_prefix_error = ""
@@ -186,7 +198,8 @@ case class Startspiel(guiBoolean: Boolean) {
             val erg = spielZugErfolgreich(laufFeld, sp, players, spBrett, gui_prefix_error + gui_ausgabe)
             legit = erg._2
 
-            if(!erg._2){
+            if (!erg._2) {
+
               gui_prefix_error = "Fehler: Bitte neue Karte angeben.\n"
             }
             if (erg._1 != null) {
@@ -224,7 +237,9 @@ case class Startspiel(guiBoolean: Boolean) {
     } // while win ende
     var gewinner2 = win + 2
     //TODO: hier kommt ein Dialogfenster
-    println(win + " hat mit seinem Teampartner " + gewinner2 + "gewonnen :)")
+    if (!guiBoolean) {
+      println(win + " hat mit seinem Teampartner " + gewinner2 + "gewonnen :)")
+    }
   }
 
   def addSpieler(players: ArrayBuffer[Spieler], anzSp: Int) {
@@ -254,40 +269,48 @@ case class Startspiel(guiBoolean: Boolean) {
 
   }
 
-  def tauscheKarte(players: ArrayBuffer[Spieler]) {
+  def tauscheKarte(players: ArrayBuffer[Spieler], laufFeld: Lauffeld) {
     //init
     var tauschKarten = Array[Int](0, 0, 0, 0)
 
-    
     //jeder spieler
     for (sp <- 0 to players.length - 1) {
 
-    	//Gui ausgeben zum karten anzeigen
-    	guiIns.update_Spiel_Brett(new Lauffeld(), players, sp + 1)
-    	
+      //Gui ausgeben zum karten anzeigen
+      guiIns.update_Spiel_Brett(laufFeld, players, sp + 1)
+
       var tKart = "0"
       var tk = Benutzerinput(guiBoolean, guiIns).StrToIntK(tKart)
       var check = false
       while (check == false) {
-        println(players(sp).getName() + ", Waehle eine Karte zum tauschen aus.")
-        println(players(sp).getKartenAusgabe())
+
         if (guiBoolean) {
           guiIns.frame_comp.textLabel.text_=(players(sp).getName() + ", Waehle eine Karte zum tauschen aus.")
+        } else {
+          println(players(sp).getName() + ", Waehle eine Karte zum tauschen aus.")
+          println(players(sp).getKartenAusgabe())
         }
-        
-        //TODO:
-        tKart = scala.io.StdIn.readLine()
 
+        //TODO:
+        var tKart = ""
+        if (!guiBoolean) {
+          tKart = scala.io.StdIn.readLine()
+        }
         tk = Benutzerinput(guiBoolean, guiIns).StrToIntK(tKart)
 
         while (tk == None) {
-          println(players(sp).getName() + ", Waehle eine Karte zum tauschen aus.")
-          println(players(sp).getKartenAusgabe())
+
           if (guiBoolean) {
             guiIns.frame_comp.textLabel.text_=(players(sp).getName() + ", Waehle eine Karte zum tauschen aus.")
+            if (guiIns.feld_inhalt_kb != "") {
+              tKart = guiIns.feld_inhalt_kb
+              guiIns.feld_inhalt_kb = ""
+            }
+          } else {
+            println(players(sp).getName() + ", Waehle eine Karte zum tauschen aus.")
+            println(players(sp).getKartenAusgabe())
+            tKart = scala.io.StdIn.readLine()
           }
-          
-          tKart = scala.io.StdIn.readLine()
           tk = Benutzerinput(guiBoolean, guiIns).StrToIntK(tKart)
         }
 
@@ -299,9 +322,10 @@ case class Startspiel(guiBoolean: Boolean) {
           }
         }
         if (!check) {
-          println("Diese Karte haben Sie nicht.")
           if (guiBoolean) {
             guiIns.frame_comp.textLabel.text_=("Diese Karte haben Sie nicht.")
+          } else {
+            println("Diese Karte haben Sie nicht.")
           }
         }
 
@@ -375,48 +399,61 @@ case class Startspiel(guiBoolean: Boolean) {
     return bl
   }
 
-  def spielZugErfolgreich(laufFeld: Lauffeld, sp: Int, players: ArrayBuffer[Spieler], 
-      spBrett: Spielbrett, gui_ausgabe: String): (ArrayBuffer[Spieler], Boolean) = {
+  def spielZugErfolgreich(laufFeld: Lauffeld, sp: Int, players: ArrayBuffer[Spieler],
+    spBrett: Spielbrett, gui_ausgabe: String): (ArrayBuffer[Spieler], Boolean) = {
 
     // karten anzeigen
-    println("Du bist dran: " + players(sp).getName())
-    println("Ass = 1, Bube = 11, Dame = 12, Koenig = 13, Joker = 14, 0 = keine moegliche")
-    println(players(sp).getKartenAusgabe()) 
-    
+    if (!guiBoolean) {
+      println("Du bist dran: " + players(sp).getName())
+      println("Ass = 1, Bube = 11, Dame = 12, Koenig = 13, Joker = 14, 0 = keine moegliche")
+      println(players(sp).getKartenAusgabe())
+    }
     //TODO: aus 3 u 2 nicht benutzt
     val aus1 = "Du bist dran: " + players(sp).getName() + "\n"
     val aus2 = "Ass = 1, Bube = 11, Dame = 12, Koenig = 13, Joker = 14, 0 = keine moegliche\n"
     val aus3 = players(sp).getKartenAusgabe() + "\n"
-    
+
     if ((players(sp).getAnzKart() == 0)) {
       return (null, true)
     }
     //auswaehlen + loeschen
-    println("Waehle eine Karte zum Spielen aus.")
     val aus4 = "Waehle eine Karte zum Spielen aus."
     if (guiBoolean) {
       guiIns.frame_comp.textLabel.text_=(gui_ausgabe + aus1 + aus4)
+    } else {
+      println("Waehle eine Karte zum Spielen aus.")
     }
     //TODO
     var spKart = Benutzerinput(guiBoolean, guiIns).karte_waehlen()
     while (spKart == None || (!players(sp).getKarten().contains(spKart.get) && spKart.get != 0)) {
-      println("Du hast nicht diese Karte.")
-      println("Waehle eine Karte zum Spielen aus.")
+
       if (guiBoolean) {
-        guiIns.frame_comp.textLabel.text_=(players(sp).getName() +  
-        ", du hast nicht diese Karte.\n" + 
-        "Waehle eine Karte zum Spielen aus.")
+        guiIns.frame_comp.textLabel.text_=(gui_ausgabe + aus1 + aus4)
+        //TODO: ", du hast nicht diese Karte.\n" +
+        //"Waehle eine Karte zum Spielen aus.")
+      } else {
+        println("Du hast nicht diese Karte.")
+        println("Waehle eine Karte zum Spielen aus.")
       }
       //TODO:
+      //if (!gui_ausgabe.startsWith("Keine moegliche Startkarte")) {
       spKart = Benutzerinput(guiBoolean, guiIns).karte_waehlen()
+      //} else {
+      //var ausg = ""
+      /*if (players(sp).getStart().size + players(sp).getZiel().size != 4) {
+          spKart = Benutzerinput(guiBoolean, guiIns).karte_waehlen()
+          spKart = Option[Int](Benutzerinput(guiBoolean, guiIns).opt_waehlen(ausg))
+        }*/
+      //}
     }
     // spkart.get ist gecheckt
     var sK = spKart.get
 
     if (sK == 0) {
-      println("Keine Karte zum Spielen.")
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=("Keine Karte zum Spielen.")
+      } else {
+        println("Keine Karte zum Spielen.")
       }
       // Karten loeschen und naechster spieler
       players(sp).delAllKarte()
@@ -438,10 +475,18 @@ case class Startspiel(guiBoolean: Boolean) {
         var newPlayers = spBrett.get_spiel_Player()
         spBrett.revert7 = false
         spBrett.remove_Spiel_Brett()
-        println("Jetzt eine neue Karte angeben.(7)")
+        if (guiBoolean) {
+          guiIns.frame_comp.textLabel.text_=("Jetzt eine neue Karte angeben.(7)")
+        } else {
+          println("Jetzt eine neue Karte angeben.(7)")
+        }
         return (newPlayers, false)
       } else {
-        println("Jetzt eine neue Karte angeben.")
+        if (guiBoolean) {
+          guiIns.frame_comp.textLabel.text_=("Jetzt eine neue Karte angeben.")
+        } else {
+          println("Jetzt eine neue Karte angeben.")
+        }
         return (null, false)
       }
 

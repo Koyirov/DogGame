@@ -1,54 +1,42 @@
 package main.scala.de.htwg.se.DogGame.controller
 
 import main.scala.de.htwg.se.DogGame.view.SwingGui
+import scala.util.control.Breaks._
+import main.scala.de.htwg.se.DogGame.model.Spielfigur
 
 case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
 
+  var spieler_farben = guiIns.spieler_farben
+  
   def figur_waehlen(): Int = {
-    guiIns.frame_comp.textLabel.editable_=(false)
+    guiIns.frame_comp.nutzerEingabe.editable_=(false)
     var check1 = false
     var fig = 0;
     var gui_prefix = ""
     while (check1 == false) {
-      println("Waehle eine Figur.")
-      if (guiBoolean) {
-        guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Figur.")
-      }
       var figStr = ""
       if (guiBoolean) {
-        println("waiting!")
-        var verlorene_zeit = 0
-        while (!guiIns.wert_verfuegbar_lfb) {
-          // warte
-          verlorene_zeit += 1
-          print(" ")
+    	  guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Figur.")
+        if (guiIns.feld_inhalt_lfb != "") {
+          figStr = guiIns.feld_inhalt_lfb
+          guiIns.feld_inhalt_lfb = ""
         }
-        println("waiting nicht mehr! " + verlorene_zeit)
-        figStr = guiIns.feld_inhalt_lfb
-        guiIns.wert_verfuegbar_lfb = false
       } else {
+    	  println("Waehle eine Figur.")
         figStr = scala.io.StdIn.readLine()
       }
       var s = StrToIntK(figStr)
 
       while (s == None) {
-        println("Waehle eine Figur.")
-        if (guiBoolean) {
-          guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Figur.")
-        }
         var figStr = ""
         if (guiBoolean) {
-          println("waiting!")
-          var verlorene_zeit = 0
-          while (!guiIns.wert_verfuegbar_lfb) {
-            // warte
-            verlorene_zeit += 1
-            print(" ")
+        	guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Figur.")
+          if (guiIns.feld_inhalt_lfb != "") {
+            figStr = guiIns.feld_inhalt_lfb
+            guiIns.feld_inhalt_lfb = ""
           }
-          println("waiting nicht mehr! " + verlorene_zeit)
-          figStr = guiIns.feld_inhalt_lfb
-          guiIns.wert_verfuegbar_lfb = false
         } else {
+        	println("Waehle eine Figur.")
           figStr = scala.io.StdIn.readLine()
         }
         s = StrToIntK(figStr)
@@ -59,9 +47,10 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
         check1 = true;
       }
       if (!check1) {
-        println("Diese Figur hast du nicht.")
         if (guiBoolean) {
           gui_prefix = "Diese Figur hast du nicht.\n"
+        }else{
+        	println("Diese Figur hast du nicht.")          
         }
       }
 
@@ -70,69 +59,69 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
   }
 
   def spFigur_waehlen(): String = {
-    guiIns.frame_comp.textLabel.editable_=(false)
-    var figStr = ""
-    if (guiBoolean) {
-      println("waiting!")
-      var verlorene_zeit = 0
-      while (!guiIns.wert_verfuegbar_lfb) {
-        // warte
-        verlorene_zeit += 1
-        print(" ")
+    return scala.io.StdIn.readLine()
+  }
+
+  def spFigur_waehlen_gui(): String = {
+    guiIns.frame_comp.nutzerEingabe.editable_=(false)
+
+    var sp = ""
+    if (guiIns.but_farbe == java.awt.Color.blue) {
+      if (guiIns.tausch_figur != "") {
+        sp = "B" + guiIns.tausch_figur
+        guiIns.tausch_figur = ""
       }
-      println("waiting nicht mehr! " + verlorene_zeit)
-      guiIns.wert_verfuegbar_lfb = false
-      return guiIns.feld_inhalt_lfb
+    } else if (guiIns.but_farbe == spieler_farben(1)) {
+      if (guiIns.tausch_figur != "") {
+        sp = "R" + guiIns.tausch_figur
+        guiIns.tausch_figur = ""
+      }
+    } else if (guiIns.but_farbe == spieler_farben(2)) {
+      if (guiIns.tausch_figur != "") {
+        sp = "G" + guiIns.tausch_figur
+        guiIns.tausch_figur = ""
+      }
     } else {
-      return scala.io.StdIn.readLine()
+      if (guiIns.tausch_figur != "") {
+        sp = "S" + guiIns.tausch_figur
+        guiIns.tausch_figur = ""
+      }
     }
+    return sp
 
   }
 
   def opt_waehlen(ausg: String): Int = {
-    guiIns.frame_comp.textLabel.editable_=(true)
+    guiIns.frame_comp.nutzerEingabe.editable_=(true)
     var opt = -1
     var check2 = false
     while (check2 == false) {
-      println("Waehlen Sie eine Option aus!")
-      if (guiBoolean) {
-        guiIns.frame_comp.textLabel.text_=(ausg + "\n" + "Waehlen Sie eine Option aus!")
-      }
       var optStr = ""
       if (guiBoolean) {
-        println("waiting!")
-        var verlorene_zeit = 0
-        while (!guiIns.wert_verfuegbar_tab) {
-          // warte
-          verlorene_zeit += 1
-          print(" ")
+    	  guiIns.frame_comp.textLabel.text_=(ausg + "Waehle eine Option aus!")
+        if (guiIns.feld_inhalt_tab != "") {
+          optStr = guiIns.feld_inhalt_tab
+          guiIns.feld_inhalt_tab = ""
         }
-        println("waiting nicht mehr! " + verlorene_zeit)
-        optStr = guiIns.feld_inhalt_tab
-        guiIns.wert_verfuegbar_tab = false
+        //guiIns.wert_verfuegbar_tab = false
       } else {
+    	  println("Waehle eine Option aus!")
         optStr = scala.io.StdIn.readLine()
       }
       var s = StrToIntK(optStr)
 
       while (s == None) {
-        println("Waehlen Sie eine Option aus!")
-        if (guiBoolean) {
-          guiIns.frame_comp.textLabel.text_=("Waehlen Sie eine Option aus!")
-        }
+        
         var optStr = ""
         if (guiBoolean) {
-          println("waiting!")
-          var verlorene_zeit = 0
-          while (!guiIns.wert_verfuegbar_tab) {
-            // warte
-            verlorene_zeit += 1
-            print(" ")
+        	guiIns.frame_comp.textLabel.text_=(ausg + "Waehle eine Option aus!")
+          if (guiIns.feld_inhalt_tab != "") {
+            optStr = guiIns.feld_inhalt_tab
+            guiIns.feld_inhalt_tab = ""
           }
-          println("waiting nicht mehr! " + verlorene_zeit)
-          optStr = guiIns.feld_inhalt_tab
-          guiIns.wert_verfuegbar_tab = false
+
         } else {
+        	println("Waehle eine Option aus!")
           optStr = scala.io.StdIn.readLine()
         }
 
@@ -145,58 +134,42 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
         check2 = true;
       }
       if (!check2) {
-        println("Diese Option haben Sie nicht.")
         if (guiBoolean) {
-          guiIns.frame_comp.textLabel.text_=("Diese Option haben Sie nicht.")
+          guiIns.frame_comp.textLabel.text_=("Diese Option hast du nicht.")
+        }else {          
+        	println("Diese Option hast du nicht.")
         }
       }
-
     }
     return opt
   }
 
   def anz_Spieler_waehlen(): Int = {
-    guiIns.frame_comp.textLabel.editable_=(true)
+    guiIns.frame_comp.nutzerEingabe.editable_=(true)
     var s = StrToIntK("")
     if (guiBoolean) {
-      println("waiting!")
-      var verlorene_zeit = 0
-      while (!guiIns.wert_verfuegbar_tab) {
-        // warte
-        verlorene_zeit += 1
-        print(" ")
+      if (guiIns.feld_inhalt_tab != "") {
+        s = StrToIntK(guiIns.feld_inhalt_tab)
+        guiIns.feld_inhalt_tab = ""
       }
-      println("waiting nicht mehr! " + verlorene_zeit)
-      s = StrToIntK(guiIns.feld_inhalt_tab)
-      guiIns.wert_verfuegbar_tab = false
+
     } else {
       s = StrToIntK(scala.io.StdIn.readLine())
     }
 
-    //while (guiBoolean && !wert_verfuegbar) {
-    // warten
-    //}
-    //s = StrToIntK(feld_inhalt)
-    //wert_verfuegbar = false
-
     while (s == None || s.get != 4) {
-      println("Bitte eine Zahl eingeben. (4)")
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=("Bitte eine Zahl eingeben. (4)")
-      }
-
-      if (guiBoolean) {
-        println("waiting!")
-        var verlorene_zeit = 0
-        while (!guiIns.wert_verfuegbar_tab) {
-          // warte
-          verlorene_zeit += 1
-          print(" ")
+        if (guiIns.feld_inhalt_tab != "") {
+          
+          s = StrToIntK(guiIns.feld_inhalt_tab)
+          guiIns.feld_inhalt_tab = ""
+        }else {
+          // TODO: warte auf benutzereingabe
+          Thread.sleep(200)
         }
-        println("waiting nicht mehr! " + verlorene_zeit)
-        s = StrToIntK(guiIns.feld_inhalt_tab)
-        guiIns.wert_verfuegbar_tab = false
       } else {
+    	  println("Bitte eine Zahl eingeben. (4)")
         s = StrToIntK(scala.io.StdIn.readLine())
       }
     }
@@ -204,24 +177,50 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
   }
 
   def karte_waehlen(): Option[Int] = {
-    guiIns.frame_comp.textLabel.editable_=(false)
+    guiIns.frame_comp.nutzerEingabe.editable_=(true)
     var spKart = ""
     if (guiBoolean) {
-      println("waiting!")
-      var verlorene_zeit = 0
-      while (!guiIns.wert_verfuegbar_kb) {
-        // warte
-        verlorene_zeit += 1
-        print(" ")
+      if (guiIns.feld_inhalt_kb != "") {
+        spKart = guiIns.feld_inhalt_kb
+        guiIns.feld_inhalt_kb = ""
       }
-      println("waiting nicht mehr! " + verlorene_zeit)
-      spKart = guiIns.feld_inhalt_kb
-      guiIns.wert_verfuegbar_kb = false
+      if (guiIns.feld_inhalt_tab != "") {
+        spKart = guiIns.feld_inhalt_tab
+        guiIns.feld_inhalt_tab = ""
+      }
     } else {
       spKart = scala.io.StdIn.readLine()
     }
     var sK = StrToIntK(spKart)
     return sK
+  }
+
+  def waehle_Joker(): Int = {
+    guiIns.frame_comp.nutzerEingabe.editable_=(true)
+    var s = StrToIntK("")
+    if (guiBoolean) {
+      if (guiIns.feld_inhalt_tab != "") {
+        s = StrToIntK(guiIns.feld_inhalt_tab)
+        guiIns.feld_inhalt_tab = ""
+      }
+    } else {
+      s = StrToIntK(scala.io.StdIn.readLine())
+    }
+
+    while (s == None) {
+      if (guiBoolean) {
+
+        guiIns.frame_comp.textLabel.text_=("Waehle eine Karte aus die der Joker sein soll.")
+
+        if (guiIns.feld_inhalt_tab != "") {
+          s = StrToIntK(guiIns.feld_inhalt_tab)
+          guiIns.feld_inhalt_tab = ""
+        }
+      } else {
+        s = StrToIntK(scala.io.StdIn.readLine())
+      }
+    }
+    return s.get
   }
 
   def StrToIntK(s: String): Option[Int] = {
