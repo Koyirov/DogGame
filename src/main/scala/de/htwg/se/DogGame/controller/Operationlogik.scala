@@ -280,9 +280,12 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       return false
     }
     // tui anzeigen
-    //TODO:
-    Tui().tui_v1(lF, alleSp)
-    guiIns.update_Spiel_Brett(lF, alleSp, spieler.getId())
+    if (guiBoolean) {
+      guiIns.update_Spiel_Brett(lF, alleSp, spieler.getId())
+    } else {
+      Tui().tui_v1(lF, alleSp)
+    }
+
     return true
   }
 
@@ -329,11 +332,11 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     }
     /*Tauschen mit Figuren, die sich im Lauffeld befinden.*/
     if (guiBoolean) {
-      guiIns.frame_comp.textLabel.text_=("Figur von andere Spieler waehlen! (z.B. R1)")
+      guiIns.frame_comp.textLabel.text_=("Figur von andere Spieler waehlen!")
     } else {
       println("Figur von andere Spieler waehlen! (z.B. R1)");
     }
-    
+
     var fig_name = "" //R1
     var fig2 = new Spielfigur("Z")
     var gui_prefix = ""

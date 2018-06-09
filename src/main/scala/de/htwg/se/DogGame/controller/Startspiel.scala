@@ -77,13 +77,13 @@ case class Startspiel(guiBoolean: Boolean) {
         for (sp <- 0 to players.length - 1) {
 
           // Alle Felder uebersichtlich ausgeben
-          //println("**alle felder ausgeben**")
-          tuiIns.tui_v1(laufFeld, players)
-          //TODO: turn
-          guiIns.update_Spiel_Brett(laufFeld, players, sp + 1)
+          if (guiBoolean) {
+            guiIns.update_Spiel_Brett(laufFeld, players, sp + 1)
+          } else {
+            tuiIns.tui_v1(laufFeld, players)
+          }
 
           // checken ob mind. eine karte moeglich
-
           //startkarte
           var checkSt = false
           for (kar <- players(sp).getKarten()) {
@@ -468,8 +468,11 @@ case class Startspiel(guiBoolean: Boolean) {
 
       } else if (spBrett.revert7) {
         laufFeld.setFeld(spBrett.get_spiel_Lauf_Feld().getFeld())
-        tuiIns.tui_v1(laufFeld, players)
-        guiIns.update_Spiel_Brett(laufFeld, players, sp + 1)
+        if (guiBoolean) {
+          guiIns.update_Spiel_Brett(laufFeld, players, sp + 1)
+        } else {
+          tuiIns.tui_v1(laufFeld, players)
+        }
         var newPlayers = spBrett.get_spiel_Player()
         spBrett.revert7 = false
         spBrett.remove_Spiel_Brett()
