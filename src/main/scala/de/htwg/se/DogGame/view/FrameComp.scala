@@ -839,12 +839,12 @@ class FrameComp{
 	textLabel.editable_=(false)
 	textLabel.background_=(panelGround.background)
   //textLabel.horizontalTextPosition
-  textLabel.text_=("Hier Kommt alle Hinweise, Warnungen und Fragen")
   //var textPanel = new FlowPanel(textField) 
   
   var nutzerEingabe = new swing.TextArea()
   nutzerEingabe.preferredSize_=(new Dimension(250,25))
   nutzerEingabe.name_=("Benutzereingaben")
+  nutzerEingabe.editable_=(false)
   var buttonOk = new Button() {
     preferredSize = new Dimension(40, 25)
     border = Swing.EmptyBorder(0, 0, 0, 0)
@@ -857,7 +857,9 @@ class FrameComp{
 	textHinweis.wordWrap_=(true)
 	textHinweis.editable_=(false)
 	textHinweis.background_=(panelGround.background)
-  textHinweis.text_=("Hinweis:\nAss = 1, Bube = 11, Dame = 12, \nKoenig = 13, Joker = 14, \n0 = keine moegliche\n")
+  textHinweis.text_=("Hinweis:\nAss = 1, Bube = 11," + 
+    "Dame = 12, \nKoenig = 13, Joker = 14, \n0 = keine moegliche\n" + 
+    "B - Blau, R - Rot\nG - Gruen, S - Gelb")
   
   var buttonOkPanel = new FlowPanel(buttonOk)
   var nutzerEingabePanel = new FlowPanel(nutzerEingabe)

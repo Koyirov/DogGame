@@ -29,19 +29,21 @@ class SwingGui extends MainFrame {
 
   // variable zum turn merken
   var aktueller_turn = 1
-  
-    // werte fuer button clicked
+
+  // werte fuer button clicked
   var feld_inhalt_lfb = ""
   var feld_inhalt_kb = ""
   var feld_inhalt_tab = ""
-  var wert_verfuegbar_lfb = false
+  var tausch_figur = ""
+  /*var wert_verfuegbar_lfb = false
   var wert_verfuegbar_kb = false
-  var wert_verfuegbar_tab = false
+  var wert_verfuegbar_tab = false*/
 
   //val lf_buttons = new ArrayBuffer[Button]()
   var lf_buttons = frame_comp.lf_buttons //collection.mutable.Map[Int, Button]()
   var sp_st_zi_fl = frame_comp.sp_st_zi_fl //collection.mutable.Map[String, (ArrayBuffer[Button], ArrayBuffer[Button])]()
   var sp_kar_but = frame_comp.sp_karten
+  var but_farbe = java.awt.Color.white
   var spieler = Array("B", "R", "G", "S")
   var kar_buttons = new ArrayBuffer[Button]()
   var spieler_farben = Array(
@@ -55,11 +57,11 @@ class SwingGui extends MainFrame {
       kar_buttons.append(b)
     }
   }
-  
+
   for (pos <- 0 to 63) {
     listenTo(lf_buttons.get(pos).get)
   }
-  
+
   for (sp <- spieler) {
     var st_feld = sp_st_zi_fl.get(sp).get._1
     var zi_feld = sp_st_zi_fl.get(sp).get._2
@@ -104,34 +106,23 @@ class SwingGui extends MainFrame {
     case e: ButtonClicked => {
       if (e.source.text == "Ok") {
         var result = frame_comp.nutzerEingabe.text
-        //TODO: vielleicht this funktioniert nicht
+        frame_comp.nutzerEingabe.text_=("")
         set_inhalt_tab(result)
       } else if (e.source.text != "*") {
         // e.source.text ist die zahl
-
         if (e.source.background == spieler_farben(aktueller_turn - 1)) {
           if (!kar_buttons.contains(e.source)) {
-            set_inhalt_lfb(e.source.text)
-          } else if (e.source.background == spieler_farben(aktueller_turn - 1)) {
+            set_inhalt_lfb(e.source.text, e.source.background)
+          } else {
             set_inhalt_kb(e.source.text)
-          }else{
-            println("was war das else")
+          }
+        }else{
+          if (!kar_buttons.contains(e.source)) {
+            set_tausch_lfb(e.source.text, e.source.background)
+            //frame_comp.nutzerEingabe.text_=(e.source.text)
           }
         }
       }
-
-      /*if (clickAnz == 0) {
-        clickAnz += 1
-        if (butID != e.hashCode()) {
-          butID = e.hashCode()
-          e.source.background_=(java.awt.Color.green)
-        }
-      } else {
-        if (butID != e.hashCode()) {
-          e.source.background_=(java.awt.Color.lightGray)
-          clickAnz -= 1
-        }
-      }*/
     }
   }
 
@@ -252,7 +243,7 @@ class SwingGui extends MainFrame {
             kar_buttons(k).text_=("")
           }
         }
-      } else if (sp_name == "S") {
+      } else {
         for (pos <- 1 to 4) {
           if (sp_st_feld.contains(pos)) {
             var button = st_feld(pos - 1)
@@ -284,21 +275,27 @@ class SwingGui extends MainFrame {
       }
     }
   }
-  
-  
-  def set_inhalt_lfb(inh: String) {
-    feld_inhalt_lfb = inh
-    wert_verfuegbar_lfb = true
-  }
-  
-  def set_inhalt_kb(inh: String) {
-    feld_inhalt_kb = inh
-    wert_verfuegbar_kb = true
-  }
-  
+
   def set_inhalt_tab(inh: String) {
     feld_inhalt_tab = inh
-    wert_verfuegbar_tab = true
+    //wert_verfuegbar_tab = true
+  }
+
+  def set_inhalt_kb(inh: String) {
+    feld_inhalt_kb = inh
+    //wert_verfuegbar_kb = true
+  }
+
+  def set_inhalt_lfb(inh: String, farbe: java.awt.Color) {
+    feld_inhalt_lfb = inh
+    but_farbe = farbe
+    //wert_verfuegbar_lfb = true
+  }
+  
+  def set_tausch_lfb(inh: String, farbe: java.awt.Color) {
+    tausch_figur = inh
+    but_farbe = farbe
+    //wert_verfuegbar_lfb = true
   }
 }
 
