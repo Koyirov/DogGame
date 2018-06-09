@@ -18,45 +18,46 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     
     var karteE = karte
     if (karte == 14) {
-      var kart = 0
-      var check2 = false
-      var gui_prefix = ""
-      while (check2 == false) {
-        if (guiBoolean) {
-          guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Karte aus die der Joker sein soll.")
-        } else {
-          println("Waehle eine Karte aus die der Joker sein soll.")
-        }
+      //var kart = 0
+     // var check2 = false
+      //var gui_prefix = ""
+     // while (check2 == false) {
+     //   if (guiBoolean) {
+     //     guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Karte aus die der Joker sein soll.")
+     //   } else {
+     //     println("Waehle eine Karte aus die der Joker sein soll.")
+     //   }
         //if(guiBoolean){
 
         //}
-        //TODO: Benutzerinput(true) zu guiBoolean aendern
-
+        
         var optStr = Option[Int](Benutzerinput(guiBoolean, guiIns).waehle_Joker())
 
-        while (optStr == None || optStr.get == 14) {
+        while (optStr == None || optStr.get == 14 || (optStr.get >= 1 && optStr.get <= 13)) {
           if (!guiBoolean) {
             println("Falsche Eingabe! Waehle eine Karte aus, die der Joker sein soll.")
           }
-          gui_prefix = "Falsche Eingabe!\n"
+          //gui_prefix = "Falsche Eingabe!\n"
           //TODO
           optStr = Option[Int](Benutzerinput(guiBoolean, guiIns).waehle_Joker())
 
         }
         //get ist gecheckt
-        kart = optStr.get
-        if (kart >= 1 && kart <= 13) {
-          check2 = true;
-        }
-        if (!check2) {
-          if (!guiBoolean) {
-            println("Diese Karte gibt es nicht.")
-          }
-          gui_prefix = "Diese Karte gibt es nicht."
-        }
+       // kart = optStr.get
+        // Diese Bediengung wurde in while Bediengung reingepackt
+       // if (kart >= 1 && kart <= 13) {
+       //   check2 = true;
+       // }
+       // if (!check2) {
+       //   if (!guiBoolean) {
+       //     println("Diese Karte gibt es nicht.")
+       //   }
+       //   gui_prefix = "Diese Karte gibt es nicht."
+       // }
 
-      }
-      karteE = kart
+      //}
+      //karteE = kart
+      karteE = optStr.get
     }
     return ausfuehren(lF, karteE, spieler, alleSp, spBrett)
   }

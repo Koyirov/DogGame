@@ -198,14 +198,14 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
   def waehle_Joker(): Int = {
     guiIns.frame_comp.nutzerEingabe.editable_=(true)
     var s = StrToIntK("")
-    if (guiBoolean) {
-      if (guiIns.feld_inhalt_tab != "") {
-        s = StrToIntK(guiIns.feld_inhalt_tab)
-        guiIns.feld_inhalt_tab = ""
-      }
-    } else {
-      s = StrToIntK(scala.io.StdIn.readLine())
-    }
+    //if (guiBoolean) {
+    //  if (guiIns.feld_inhalt_tab != "") {
+    //    s = StrToIntK(guiIns.feld_inhalt_tab)
+    //    guiIns.feld_inhalt_tab = ""
+    //  }
+    //} else {
+    //  s = StrToIntK(scala.io.StdIn.readLine())
+    //}
 
     while (s == None) {
       if (guiBoolean) {
@@ -217,6 +217,7 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
           guiIns.feld_inhalt_tab = ""
         }
       } else {
+        println("Waehle eine Karte aus die der Joker sein soll.")
         s = StrToIntK(scala.io.StdIn.readLine())
       }
     }
