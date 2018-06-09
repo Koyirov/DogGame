@@ -106,18 +106,30 @@ class SwingGui extends MainFrame {
     case e: ButtonClicked => {
       if (e.source.text == "Ok") {
         var result = frame_comp.nutzerEingabe.text
+        set_inhalt_kb("")
+        set_inhalt_lfb("", java.awt.Color.white)
+        set_tausch_lfb("", java.awt.Color.white)
         set_inhalt_tab(result)
         frame_comp.nutzerEingabe.text_=("")
       } else if (e.source.text != "*") {
         // e.source.text ist die zahl
         if (e.source.background == spieler_farben(aktueller_turn - 1)) {
           if (!kar_buttons.contains(e.source)) {
+            set_inhalt_kb("")
+            set_tausch_lfb("", java.awt.Color.white)
+            set_inhalt_tab("")
             set_inhalt_lfb(e.source.text, e.source.background)
           } else {
+            set_tausch_lfb("", java.awt.Color.white)
+            set_inhalt_tab("")
+            set_inhalt_lfb("", e.source.background)
             set_inhalt_kb(e.source.text)
           }
-        }else{
+        } else {
           if (!kar_buttons.contains(e.source)) {
+            set_inhalt_tab("")
+            set_inhalt_lfb("", e.source.background)
+            set_inhalt_kb("")
             set_tausch_lfb(e.source.text, e.source.background)
             //frame_comp.nutzerEingabe.text_=(e.source.text)
           }
@@ -182,12 +194,14 @@ class SwingGui extends MainFrame {
         for (pos <- 1 to 4) {
           if (sp_st_feld.contains(pos)) {
             var button = st_feld(pos - 1)
+            var but_text = sp_st_feld.get(pos).get.getFigur().charAt(1).toString()
             button.text_=((pos).toString())
             button.background_=(java.awt.Color.blue)
           }
           if (sp_zi_feld.contains(pos)) {
             var button = zi_feld(pos - 1)
-            button.text_=((pos).toString())
+            var but_text = sp_zi_feld.get(pos).get.getFigur().charAt(1).toString()
+            button.text_=(but_text)
             button.background_=(java.awt.Color.blue)
           }
         }
@@ -203,12 +217,14 @@ class SwingGui extends MainFrame {
         for (pos <- 1 to 4) {
           if (sp_st_feld.contains(pos)) {
             var button = st_feld(pos - 1)
-            button.text_=((pos).toString())
+            var but_text = sp_st_feld.get(pos).get.getFigur().charAt(1).toString()
+            button.text_=(but_text)
             button.background_=(java.awt.Color.red)
           }
           if (sp_zi_feld.contains(pos)) {
             var button = zi_feld(pos - 1)
-            button.text_=((pos).toString())
+            var but_text = sp_zi_feld.get(pos).get.getFigur().charAt(1).toString()
+            button.text_=(but_text)
             button.background_=(java.awt.Color.red)
           }
         }
@@ -225,12 +241,14 @@ class SwingGui extends MainFrame {
         for (pos <- 1 to 4) {
           if (sp_st_feld.contains(pos)) {
             var button = st_feld(pos - 1)
-            button.text_=((pos).toString())
+            var but_text = sp_st_feld.get(pos).get.getFigur().charAt(1).toString()
+            button.text_=(but_text)
             button.background_=(java.awt.Color.green)
           }
           if (sp_zi_feld.contains(pos)) {
             var button = zi_feld(pos - 1)
-            button.text_=((pos).toString())
+            var but_text = sp_zi_feld.get(pos).get.getFigur().charAt(1).toString()
+            button.text_=(but_text)
             button.background_=(java.awt.Color.green)
           }
         }
@@ -247,12 +265,14 @@ class SwingGui extends MainFrame {
         for (pos <- 1 to 4) {
           if (sp_st_feld.contains(pos)) {
             var button = st_feld(pos - 1)
-            button.text_=((pos).toString())
+            var but_text = sp_st_feld.get(pos).get.getFigur().charAt(1).toString()
+            button.text_=(but_text)
             button.background_=(java.awt.Color.yellow)
           }
           if (sp_zi_feld.contains(pos)) {
             var button = zi_feld(pos - 1)
-            button.text_=((pos).toString())
+            var but_text = sp_zi_feld.get(pos).get.getFigur().charAt(1).toString()
+            button.text_=(but_text)
             button.background_=(java.awt.Color.yellow)
           }
         }
@@ -291,7 +311,7 @@ class SwingGui extends MainFrame {
     but_farbe = farbe
     //wert_verfuegbar_lfb = true
   }
-  
+
   def set_tausch_lfb(inh: String, farbe: java.awt.Color) {
     tausch_figur = inh
     but_farbe = farbe

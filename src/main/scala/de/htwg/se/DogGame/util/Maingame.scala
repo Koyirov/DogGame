@@ -7,6 +7,7 @@ import main.scala.de.htwg.se.DogGame.view.SwingGui
 object Maingame {
 
   def main(args: Array[String]) {
+    
     var guiBoolean = false
     println("gui?")
     var input = scala.io.StdIn.readLine()

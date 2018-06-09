@@ -684,10 +684,10 @@ class FrameComp{
   var panel19 = new GridPanel(4, 1) //4
   panel19.contents += button89 += button90 += button91 += button92
   var g_ziel  = new ArrayBuffer[Button]()
-  g_ziel += button89 += button90 += button91 += button92
+  g_ziel += button92 += button91 += button90 += button89
   var panel18 = new FlowPanel(FlowPanel.Alignment.Right)(button85, button86, button87, button88) //4
   var r_ziel  = new ArrayBuffer[Button]()
-  r_ziel += button85 += button86 += button87 += button88
+  r_ziel += button88 += button87 += button86 += button85
   var panel17 = new GridPanel(4, 1) //4
   panel17.contents += button81 += button82 += button83 += button84
   var b_ziel  = new ArrayBuffer[Button]()
