@@ -15,49 +15,19 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
   import scala.collection.mutable.ArrayBuffer
 
   def ausfuehren14(lF: Lauffeld, karte: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
-    
+
     var karteE = karte
     if (karte == 14) {
-      //var kart = 0
-     // var check2 = false
-      //var gui_prefix = ""
-     // while (check2 == false) {
-     //   if (guiBoolean) {
-     //     guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Karte aus die der Joker sein soll.")
-     //   } else {
-     //     println("Waehle eine Karte aus die der Joker sein soll.")
-     //   }
-        //if(guiBoolean){
-
-        //}
-        
-        var optStr = Option[Int](Benutzerinput(guiBoolean, guiIns).waehle_Joker())
-
-        while (optStr == None || optStr.get == 14 || (optStr.get >= 1 && optStr.get <= 13)) {
-          if (!guiBoolean) {
-            println("Falsche Eingabe! Waehle eine Karte aus, die der Joker sein soll.")
-          }
-          //gui_prefix = "Falsche Eingabe!\n"
-          //TODO
-          optStr = Option[Int](Benutzerinput(guiBoolean, guiIns).waehle_Joker())
-
+      
+      var opt = Benutzerinput(guiBoolean, guiIns).waehle_Joker()
+      while (opt == 14 || (opt <= 1 && opt >= 13)) {
+        if (!guiBoolean) {
+          println("Falsche Eingabe! Waehle eine Karte aus, die der Joker sein soll.")
         }
-        //get ist gecheckt
-       // kart = optStr.get
-        // Diese Bediengung wurde in while Bediengung reingepackt
-       // if (kart >= 1 && kart <= 13) {
-       //   check2 = true;
-       // }
-       // if (!check2) {
-       //   if (!guiBoolean) {
-       //     println("Diese Karte gibt es nicht.")
-       //   }
-       //   gui_prefix = "Diese Karte gibt es nicht."
-       // }
-
-      //}
-      //karteE = kart
-      karteE = optStr.get
+        opt = Benutzerinput(guiBoolean, guiIns).waehle_Joker()
+      }
+      karteE = opt
+      
     }
     return ausfuehren(lF, karteE, spieler, alleSp, spBrett)
   }
@@ -200,7 +170,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     for (sp <- alleSp) {
       if (fig.getFigur().startsWith(sp.getName())) {
         sp.start += ((fig, Integer.valueOf(fig.getFigur().substring(1))))
-        
+
       }
     }
   }

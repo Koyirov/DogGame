@@ -106,8 +106,8 @@ class SwingGui extends MainFrame {
     case e: ButtonClicked => {
       if (e.source.text == "Ok") {
         var result = frame_comp.nutzerEingabe.text
-        frame_comp.nutzerEingabe.text_=("")
         set_inhalt_tab(result)
+        frame_comp.nutzerEingabe.text_=("")
       } else if (e.source.text != "*") {
         // e.source.text ist die zahl
         if (e.source.background == spieler_farben(aktueller_turn - 1)) {
