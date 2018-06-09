@@ -13,7 +13,7 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
     var check1 = false
     var fig = 0;
     var gui_prefix = ""
-    while (check1 == false) {
+    while (!check1) {
       var figStr = ""
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Figur.")
@@ -27,33 +27,19 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
       }
       var s = StrToIntK(figStr)
 
-      while (s == None) {
-        var figStr = ""
-        if (guiBoolean) {
-          guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Figur.")
-          if (guiIns.feld_inhalt_lfb != "") {
-            figStr = guiIns.feld_inhalt_lfb
-            guiIns.feld_inhalt_lfb = ""
+      if (s != None) {
+        fig = s.get
+        if (fig >= 1 && fig <= 4) {
+          check1 = true;
+        }
+        if (!check1) {
+          if (guiBoolean) {
+            gui_prefix = "Diese Figur hast du nicht.\n"
+          } else {
+            println("Diese Figur hast du nicht.")
           }
-        } else {
-          println("Waehle eine Figur.")
-          figStr = scala.io.StdIn.readLine()
-        }
-        s = StrToIntK(figStr)
-
-      }
-      fig = s.get
-      if (fig >= 1 && fig <= 4) {
-        check1 = true;
-      }
-      if (!check1) {
-        if (guiBoolean) {
-          gui_prefix = "Diese Figur hast du nicht.\n"
-        } else {
-          println("Diese Figur hast du nicht.")
         }
       }
-
     }
     return fig
   }

@@ -18,7 +18,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
 
     var karteE = karte
     if (karte == 14) {
-      
+
       var opt = Benutzerinput(guiBoolean, guiIns).waehle_Joker()
       while (opt == 14 || (opt <= 1 && opt >= 13)) {
         if (!guiBoolean) {
@@ -27,7 +27,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         opt = Benutzerinput(guiBoolean, guiIns).waehle_Joker()
       }
       karteE = opt
-      
+
     }
     return ausfuehren(lF, karteE, spieler, alleSp, spBrett)
   }
@@ -105,7 +105,6 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
 
         for (i <- 1 to 7) {
           // optionen bestimmen
-
           if (!laufen7(lF, fig, spieler, alleSp, spBrett)) {
             spBrett.revert7 = true
             return false
@@ -146,8 +145,8 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         }
 
       }
-      case _ => { // der rest - normale karten: 2,3,5,6,8,9,10,12
-
+      case _ => {
+        // der rest - normale karten: 2,3,5,6,8,9,10,12
         return laufenN(lF, fig, karte, spieler, alleSp)
 
       }
@@ -255,7 +254,6 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       }
     } else if (spieler.ziel.contains(figur)) {
       // Figur nicht im Lauffeld -> Figur ist im Zielfeld
-
       var pos = spieler.ziel.get(figur)
       var schritt = 4 - pos.get
       var l = spieler.ziel.map(_.swap)
@@ -264,10 +262,9 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         var belegt = false
         if (l.contains(pos.get + 1)) {
           belegt = true
-
         }
         if (!belegt) {
-          spieler.ziel.remove(figur)
+          spieler.ziel -= figur
           spieler.ziel += ((figur, pos.get + 1))
         } else {
           if (guiBoolean) {
@@ -277,7 +274,6 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
           }
           return false
         }
-
       }
     } else {
       // Figur nicht im Lauffeld , Figur ist nicht im Zielfeld -> Figur im Startfeld
@@ -337,24 +333,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     } else {
       println("Figur von andere Spieler waehlen! (z.B. R1)");
     }
-    //var fig2 = spieler.getFigur(us_in().spFigur_waehlen())
-    //TODO:
-    /*if (guiBoolean) {
-      fig_name = Benutzerinput(guiBoolean, guiIns).spFigur_waehlen_gui()
-    } else {
-      fig_name = Benutzerinput(guiBoolean, guiIns).spFigur_waehlen()
-    }
-    if (guiBoolean) {
-        guiIns.frame_comp.textLabel.text_=(fig_name)
-        break
-      }
-    var fig2 = lF.getFigur(fig_name)*/
-    //var fig2 =
-    /*for (sp <- alleSp) {
-      if (!fig_name.startsWith(sp.getName())) {
-        fig2 = sp.getFig(sp.getName())
-      }
-    }*/
+    
     var fig_name = "" //R1
     var fig2 = new Spielfigur("Z")
     var gui_prefix = ""
@@ -363,9 +342,9 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       //TODO:
       if (guiBoolean) {
         if (fig_name == "") {
-          guiIns.frame_comp.textLabel.text_=("Figur von anderem Spieler waehlen! (z.B. R1)")
+          guiIns.frame_comp.textLabel.text_=("Figur von anderem Spieler waehlen!")
         } else {
-          guiIns.frame_comp.textLabel.text_=(gui_prefix + "Figur von anderem Spieler waehlen! (z.B. R1)")
+          guiIns.frame_comp.textLabel.text_=(gui_prefix + "Figur von anderem Spieler waehlen!")
         }
         fig_name = Benutzerinput(guiBoolean, guiIns).spFigur_waehlen_gui()
       } else {
@@ -373,7 +352,6 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         println("Figur von anderem Spieler waehlen! (z.B. R1)");
         fig_name = Benutzerinput(guiBoolean, guiIns).spFigur_waehlen()
       }
-      guiIns.frame_comp.textHinweis.text_=(fig_name)
       fig2 = lF.getFigur(fig_name)
       gui_prefix = "Diese Figur kann man nicht tauschen.\n"
     } while ((fig2 == null) || (!lF.getFeld().contains(fig2) && fig2.getFigur().startsWith(spieler.getName())))
@@ -427,12 +405,16 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
 
         var posZielF = 4
         for (f <- spieler.ziel) {
-          if (posZielF == 4) {
+          if (posZielF > f._2) {
             posZielF = f._2
           }
         }
 
-        if (zielPos < posZielF) {
+        if (posZielF != 4) {
+          posZielF -= 1
+        }
+
+        if (posZielF != 0 && zielPos <= posZielF) {
           spieler.ziel += ((figur, zielPos))
         } else {
           if (guiBoolean) {

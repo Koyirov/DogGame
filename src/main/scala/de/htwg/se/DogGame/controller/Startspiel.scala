@@ -199,7 +199,6 @@ case class Startspiel(guiBoolean: Boolean) {
             legit = erg._2
 
             if (!erg._2) {
-
               gui_prefix_error = "Fehler: Bitte neue Karte angeben.\n"
             }
             if (erg._1 != null) {
@@ -464,7 +463,6 @@ case class Startspiel(guiBoolean: Boolean) {
       // kartenlogik ausfuehren
 
       if (op_log(guiBoolean, guiIns).ausfuehren14(laufFeld, sK, players(sp), players, spBrett)) {
-
         players(sp).delKarte(sK)
         return (null, true)
 
@@ -475,16 +473,12 @@ case class Startspiel(guiBoolean: Boolean) {
         var newPlayers = spBrett.get_spiel_Player()
         spBrett.revert7 = false
         spBrett.remove_Spiel_Brett()
-        if (guiBoolean) {
-          guiIns.frame_comp.textLabel.text_=("Jetzt eine neue Karte angeben.(7)")
-        } else {
+        if (!guiBoolean) {
           println("Jetzt eine neue Karte angeben.(7)")
         }
         return (newPlayers, false)
       } else {
-        if (guiBoolean) {
-          guiIns.frame_comp.textLabel.text_=("Jetzt eine neue Karte angeben.")
-        } else {
+        if (!guiBoolean) {
           println("Jetzt eine neue Karte angeben.")
         }
         return (null, false)
