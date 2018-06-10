@@ -6,9 +6,13 @@ case class Tui() {
   import main.scala.de.htwg.se.DogGame.model.Spieler
   import main.scala.de.htwg.se.DogGame.model.Spielfigur
   import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
+  import org.apache.logging.log4j.{ LogManager, Logger, Level}
+  
+  val logger: Logger = LogManager.getLogger(this.getClass.getName)
   
   def tui_v1(lF: Lauffeld, p: ArrayBuffer[Spieler]) {
-
+    
+    logger.info("tui_v1() zeigt auktuelle Spiel Zustand")
     var l = lF.getFeld().map(_.swap)
 
     println("Spielfeld:")
@@ -53,6 +57,7 @@ case class Tui() {
   }
 
   def pos(l: collection.mutable.Map[Int, Spielfigur], p: ArrayBuffer[Spieler], pos: Int): String = {
+    logger.info("pos() bestimmt, ob ein Figur sich in angegeben Position befindet")
     if (l.contains(pos))
       // TODO option auspacken
       return l.get(pos).get.getFigur()
@@ -62,6 +67,7 @@ case class Tui() {
 
   //AUFRUF: sz(ArrayMitSpielern, SpielerID, 0=start/1=ziel, PositionImFeld)
   def sz(p: ArrayBuffer[Spieler], sID: Int, feldID: Int, posID: Int): String = {
+    logger.info("sz() bestimmt fuer Start und Zielfelds, ob ein Figur sich in angegeben Position befindet")
     if (feldID == 0) {
       //START
       var st: collection.mutable.Map[Int, Spielfigur] = p(sID - 1).getStart().map(_.swap)

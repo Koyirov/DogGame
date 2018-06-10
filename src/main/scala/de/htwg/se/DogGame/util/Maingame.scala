@@ -3,9 +3,12 @@ package src.test.scala.de.htwg.se.DogGame.util
 import java.awt.Dimension
 import main.scala.de.htwg.se.DogGame.controller.Startspiel
 import main.scala.de.htwg.se.DogGame.view.SwingGui
-
+import org.apache.logging.log4j.{ LogManager, Logger, Level}
+  
 object Maingame {
-
+  
+  val logger: Logger = LogManager.getLogger(this.getClass.getName)
+  
   def main(args: Array[String]) {
     
     var guiBoolean = false
@@ -24,6 +27,7 @@ object Maingame {
       game.guiIns.visible_=(true)
 
     }
+    logger.info("Maingame() User will" + input)
     game.start_spiel()
     //SwingGui.main(args)
     //fr.top
