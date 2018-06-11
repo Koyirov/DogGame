@@ -27,7 +27,7 @@ object Maingame {
       game.guiIns.visible_=(true)
 
     }
-    logger.log(Level.ERROR, "Maingame() User will " + input)
+    logger.log(Level.INFO, "Maingame() User will " + input)
     game.start_spiel()
     //SwingGui.main(args)
     //fr.top
