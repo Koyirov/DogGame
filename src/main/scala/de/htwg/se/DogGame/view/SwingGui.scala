@@ -17,11 +17,13 @@ import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
 import main.scala.de.htwg.se.DogGame.model.Spieler
 import main.scala.de.htwg.se.DogGame.model.Spielfigur
 import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
-import _root_.main.scala.de.htwg.se.DogGame.view.FrameComp
+
 
 //object SwingGui extends SimpleSwingApplication {
 class SwingGui extends MainFrame {
 
+  import _root_.main.scala.de.htwg.se.DogGame.view.FrameComp
+  
   title = "DogGame"
   //contents = ui
   var frame_comp = new FrameComp()

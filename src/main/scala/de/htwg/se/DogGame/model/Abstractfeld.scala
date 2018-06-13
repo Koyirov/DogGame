@@ -5,7 +5,7 @@ abstract class Abstractfeld {
   import scala.collection.mutable.ArrayBuffer
   import _root_.main.scala.de.htwg.se.DogGame.model.Spielfigur
 
-  var feld = collection.mutable.Map[Spielfigur, Int]()
+  var feld = collection.mutable.Map[Spielfigur, Int]() 
   
   
   def getFeld(): collection.mutable.Map[Spielfigur, Int] = {
