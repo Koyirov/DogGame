@@ -13,14 +13,17 @@ case class Startspiel(guiBoolean: Boolean) {
   import _root_.main.scala.de.htwg.se.DogGame.view.SwingGui
   import _root_.main.scala.de.htwg.se.DogGame.controller.{ Operationlogik => op_log }
   import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
+  import org.apache.logging.log4j.{ LogManager, Logger, Level}
 
   var tuiIns = Tui()
   var guiIns = new SwingGui()
+  val logger: Logger = LogManager.getLogger(this.getClass.getName)
 
   //var revert7 = false
 
   // Alle Lauffelder mit spBrett.get_spiel_Lauf_Feld() ersetzt
   def start_spiel() {
+    logger.log(Level.INFO, "start_spiel(): Spiel getartet")
     //var kartenStapel = ArrayBuffer[Int]()
     var kartenStapel = new Karten()
     var laufFeld = new Lauffeld()
@@ -242,6 +245,7 @@ case class Startspiel(guiBoolean: Boolean) {
   }
 
   def addSpieler(players: ArrayBuffer[Spieler], anzSp: Int) {
+    logger.log(Level.INFO, "addSpieler(): Spieler werden hinzugefuegt")
     for (i <- 1 to anzSp) {
 
       var p1 = new Spieler(i, (i - 1) * 16);
@@ -251,6 +255,7 @@ case class Startspiel(guiBoolean: Boolean) {
   }
 
   def verteieleKarte(players: ArrayBuffer[Spieler], kartenStapel: Karten, karGrenz: Int) {
+    logger.log(Level.INFO, "verteileKarte(): Karten werden verteilt")
     val r = scala.util.Random
 
     // spieler - default 4
@@ -269,6 +274,7 @@ case class Startspiel(guiBoolean: Boolean) {
   }
 
   def tauscheKarte(players: ArrayBuffer[Spieler], laufFeld: Lauffeld) {
+    logger.log(Level.INFO, "tauscheKarte() Spieler tauschen Karten")
     //init
     var tauschKarten = Array[Int](0, 0, 0, 0)
 
@@ -400,7 +406,7 @@ case class Startspiel(guiBoolean: Boolean) {
 
   def spielZugErfolgreich(laufFeld: Lauffeld, sp: Int, players: ArrayBuffer[Spieler],
     spBrett: Spielbrett, gui_ausgabe: String): (ArrayBuffer[Spieler], Boolean) = {
-
+    logger.log(Level.INFO, "spielZugErfolgreich() gewaehlte Karte wird gespielt")
     // karten anzeigen
     if (!guiBoolean) {
       println("Du bist dran: " + players(sp).getName())

@@ -5,17 +5,20 @@ import main.scala.de.htwg.se.DogGame.model.Lauffeld
 import main.scala.de.htwg.se.DogGame.view.Tui
 import main.scala.de.htwg.se.DogGame.model.Spielbrett
 import main.scala.de.htwg.se.DogGame.model.Spielfigur
-import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
 import main.scala.de.htwg.se.DogGame.view.SwingGui
 import scala.util.control.Breaks._
+import org.apache.logging.log4j.{ LogManager, Logger, Level}
 //import main.scala.de.htwg.se.DogGame.controller.Startspiel
 
 case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
-
+  
+  import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
   import scala.collection.mutable.ArrayBuffer
+  
+  val logger: Logger = LogManager.getLogger(this.getClass.getName)
 
   def ausfuehren14(lF: Lauffeld, karte: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
-
+    logger.log(Level.INFO, "ausfuehren14(): ueberprueft, ob Karte Jocker ist")
     var karteE = karte
     if (karte == 14) {
 
@@ -33,7 +36,8 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
   }
 
   def ausfuehren(lF: Lauffeld, karte: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
-
+    
+    logger.log(Level.INFO, "ausfuehren(): Karten werden abgefangen")
     var tmp = spieler.getName() + Benutzerinput(guiBoolean, guiIns).figur_waehlen()
     var fig = spieler.getFig(tmp)
 
@@ -154,6 +158,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
   }
 
   def schickStart(lF: Lauffeld, alleSp: ArrayBuffer[Spieler], pos: Int) = {
+    logger.log(Level.INFO, "schickStart(): Figur wir zu Startfeld geschiekct.")
     // get figur
     var fig = new Spielfigur("0")
     for ((k, v) <- lF.getFeld()) {
@@ -173,9 +178,10 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       }
     }
   }
-
+  
+  //TODO: diese Funktion in Lauffeld auch implementiert
   def lFIstFrei(lF: Lauffeld, p: ArrayBuffer[Spieler], pos: Int): Boolean = {
-
+    logger.log(Level.INFO, "lFIstFrei(): Ueberprueft ob Lauffeld frei ist wir zu Startfeld geschiekct.")
     var l = lF.getFeld().clone().map(_.swap)
     for (einer <- p) {
       //auf einer startposition
@@ -196,7 +202,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
   }
 
   def laufen0(lF: Lauffeld, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
-
+    logger.log(Level.INFO, "laufen0(): Aus Startfeld rausgehen.")
     if (!spieler.delFigur(figur)) {
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=("Etwas lief falsch - keine Figur geloescht")
@@ -218,6 +224,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
 
   def laufen7(lF: Lauffeld, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
     // 7
+    logger.log(Level.INFO, "laufen7(): Option 7.")
     if (lF.getFeld().contains(figur)) {
       var pos = lF.getFeld().get(figur)
       var erg = (pos.get + 1) % 64
@@ -291,6 +298,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
 
   def laufen14(lF: Lauffeld, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
     // 4 zurueck
+    logger.log(Level.INFO, "laufen14(): Option 4 ruecklauf.")
     if (lF.getFeld().contains(figur)) {
       var pos = lF.getFeld().get(figur)
       lF.getFeld().remove(figur)
@@ -320,7 +328,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
   }
 
   def laufen15(lF: Lauffeld, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
-
+    logger.log(Level.INFO, "laufen15(): Bube, Figur tauschen.")
     var checkAndere = false
     for (figs <- lF.getFeld().seq) {
       if (!figs._1.getFigur().startsWith(spieler.getName()))
@@ -380,7 +388,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
   }
 
   def laufenN(lF: Lauffeld, figur: Spielfigur, opt: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
-
+    logger.log(Level.INFO, "laufenN(): Normal laufen.")
     // im normalfall : 1-13
     if (lF.getFeld().contains(figur)) {
       var pos = lF.getFeld().get(figur)
