@@ -18,10 +18,10 @@ import main.scala.de.htwg.se.DogGame.model.Spielfigur
 import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
 
 //object SwingGui extends SimpleSwingApplication {
-class SwingGui extends MainFrame with SwingGuiInterfaces{
+class SwingGui extends MainFrame with SwingGuiInterfaces {
 
   import _root_.main.scala.de.htwg.se.DogGame.view.FrameComp
-  
+
   title = "DogGame"
   //contents = ui
   var frame_comp = new FrameComp()
@@ -316,6 +316,17 @@ class SwingGui extends MainFrame with SwingGuiInterfaces{
     tausch_figur = inh
     but_farbe = farbe
     //wert_verfuegbar_lfb = true
+  }
+  
+  def gratualtion_fenster(text: String){
+    var textHinweis = new swing.TextArea()
+    //textHinweis.preferredSize_=(new Dimension(250, 100))
+    textHinweis.lineWrap_=(true)
+    textHinweis.wordWrap_=(true)
+    textHinweis.editable_=(false)
+    textHinweis.background_=(java.awt.Color.green)
+    textHinweis.text_=(text)
+    contents = textHinweis
   }
 }
 

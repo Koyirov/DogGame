@@ -14,6 +14,7 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
   import _root_.main.scala.de.htwg.se.DogGame.controller.{ Operationlogik => op_log }
   import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
   import org.apache.logging.log4j.{ LogManager, Logger, Level }
+  import scala.swing._
 
   var tuiIns = Tui()
   //var guiIns = new SwingGui()
@@ -239,7 +240,13 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
     } // while win ende
     var gewinner2 = win + 2
     //TODO: hier kommt ein Dialogfenster
-    if (!guiBoolean) {
+    var gewinner = win + " hat mit seinem Teampartner " + gewinner2 + "gewonnen :)"
+    if (guiBoolean) {
+      var dial = Dialog.showMessage(null, gewinner, title = "Herzlichen Glueckwuensch!!!")
+      if (dial.getClass() == null) {
+        sys.exit(0)
+      }
+    } else {
       println(win + " hat mit seinem Teampartner " + gewinner2 + "gewonnen :)")
     }
   }
