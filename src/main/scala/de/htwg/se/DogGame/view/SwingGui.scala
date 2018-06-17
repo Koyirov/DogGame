@@ -18,7 +18,7 @@ import main.scala.de.htwg.se.DogGame.model.Spielfigur
 import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
 
 //object SwingGui extends SimpleSwingApplication {
-class SwingGui extends MainFrame with SwingGuiInterfaces {
+class SwingGui extends MainFrame with SwingGuiInterface {
 
   import _root_.main.scala.de.htwg.se.DogGame.view.FrameComp
 

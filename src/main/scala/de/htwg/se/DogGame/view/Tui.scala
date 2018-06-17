@@ -1,6 +1,6 @@
 package main.scala.de.htwg.se.DogGame.view
 
-case class Tui() extends TuiInterfaces {
+case class Tui() extends TuiInterface {
   
   import scala.collection.mutable.ArrayBuffer
   import main.scala.de.htwg.se.DogGame.model.Spieler
