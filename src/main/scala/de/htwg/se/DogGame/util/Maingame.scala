@@ -2,11 +2,11 @@ package src.test.scala.de.htwg.se.DogGame.util
 
 import java.awt.Dimension
 import main.scala.de.htwg.se.DogGame.controller.Startspiel
-import main.scala.de.htwg.se.DogGame.view.{ SwingGui, Fenster }
+import main.scala.de.htwg.se.DogGame.view.{ SwingGui }
+import main.scala.de.htwg.se.DogGame.view.Fenster
 import org.apache.logging.log4j.{ LogManager, Logger, Level }
 import scala.io.Source
 import scala.swing._
-//used to listen
 import scala.swing.event._
 import scala.swing.BorderPanel.Position._
 

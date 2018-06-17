@@ -173,7 +173,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     // setze in zielSpieler.start
     for (sp <- alleSp) {
       if (fig.getFigur().startsWith(sp.getName())) {
-        sp.start += ((fig, Integer.valueOf(fig.getFigur().substring(1))))
+        sp.start.getFeld() += ((fig, Integer.valueOf(fig.getFigur().substring(1)))) 
 
       }
     }
@@ -251,7 +251,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       if (pos.get == spieler.startPos && (9 <= vorPos && vorPos <= 15)) {
         // Ins Ziel laufen wenn davor vor dem ziel war( 9 bis 15)!
         val zielPos = erg - spieler.startPos
-        spieler.ziel += ((figur, zielPos))
+        spieler.ziel.getFeld() += ((figur, zielPos))
       } else {
         // noch eine runde laufen
         if (lF.posBelegt(erg))
@@ -259,11 +259,11 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
           schickStart(lF, alleSp, erg)
         lF.getFeld() += ((figur, erg))
       }
-    } else if (spieler.ziel.contains(figur)) {
+    } else if (spieler.ziel.getFeld().contains(figur)) {
       // Figur nicht im Lauffeld -> Figur ist im Zielfeld
-      var pos = spieler.ziel.get(figur)
+      var pos = spieler.ziel.getFeld().get(figur)
       var schritt = 4 - pos.get
-      var l = spieler.ziel.map(_.swap)
+      var l = spieler.ziel.getFeld().map(_.swap)
 
       if (1 <= schritt) {
         var belegt = false
@@ -271,8 +271,8 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
           belegt = true
         }
         if (!belegt) {
-          spieler.ziel -= figur
-          spieler.ziel += ((figur, pos.get + 1))
+          spieler.ziel.getFeld() -= figur
+          spieler.ziel.getFeld() += ((figur, pos.get + 1))
         } else {
           if (guiBoolean) {
             guiIns.frame_comp.textLabel.text_=("Figur kann sich nicht mehr laufen!")
@@ -416,7 +416,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         val zielPos = erg - spieler.startPos
 
         var posZielF = 4
-        for (f <- spieler.ziel) {
+        for (f <- spieler.ziel.getFeld()) {
           if (posZielF > f._2) {
             posZielF = f._2
           }
@@ -427,7 +427,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         }
 
         if (posZielF != 0 && zielPos <= posZielF) {
-          spieler.ziel += ((figur, zielPos))
+          spieler.ziel.getFeld() += ((figur, zielPos))
         } else {
           if (guiBoolean) {
             guiIns.frame_comp.textLabel.text_=("Zielfeld nicht erreichbar!")
@@ -443,10 +443,10 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
           schickStart(lF, alleSp, erg)
         lF.getFeld() += ((figur, erg))
       }
-    } else if (spieler.ziel.contains(figur)) {
+    } else if (spieler.ziel.getFeld().contains(figur)) {
       // Figur nicht im Lauffeld -> Figur ist im Zielfeld
 
-      var pos = spieler.ziel.get(figur)
+      var pos = spieler.ziel.getFeld().get(figur)
 
       if (pos == None) {
         if (guiBoolean) {
@@ -457,7 +457,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         return false
       }
       var schritt = 4 - pos.get
-      var l = spieler.ziel.map(_.swap)
+      var l = spieler.ziel.getFeld().map(_.swap)
 
       if (opt <= schritt) {
         var belegt = false
@@ -467,8 +467,8 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
           }
         }
         if (!belegt) {
-          spieler.ziel.remove(figur)
-          spieler.ziel += ((figur, pos.get + schritt))
+          spieler.ziel.getFeld().remove(figur)
+          spieler.ziel.getFeld() += ((figur, pos.get + schritt))
         } else {
           if (guiBoolean) {
             guiIns.frame_comp.textLabel.text_=("Figur kann sich nicht mehr laufen!")

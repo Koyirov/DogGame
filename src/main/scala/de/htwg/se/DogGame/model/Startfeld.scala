@@ -1,6 +1,6 @@
 package main.scala.de.htwg.se.DogGame.model
 
-class Startfeld(st: Int) extends Abstractfeld{
+class Startfeld() extends Abstractfeld{
   import _root_.main.scala.de.htwg.se.DogGame.model.Spielfigur
   
   def setStart(spielerId: Int) {

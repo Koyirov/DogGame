@@ -239,7 +239,6 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
 
     } // while win ende
     var gewinner2 = win + 2
-    //TODO: hier kommt ein Dialogfenster
     var gewinner = win + " hat mit seinem Teampartner " + gewinner2 + "gewonnen :)"
     if (guiBoolean) {
       var dial = Dialog.showMessage(null, gewinner, title = "Herzlichen Glueckwuensch!!!")
@@ -277,7 +276,6 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
         kartenStapel.getKarten().remove(zufall)
       }
     }
-
   }
 
   def tauscheKarte(players: ArrayBuffer[Spieler], laufFeld: Lauffeld) {
@@ -380,19 +378,19 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
     // im ziel blockiert
     var bl = false
 
-    if (!players(sp).ziel.isEmpty) {
+    if (!players(sp).ziel.getFeld().isEmpty) {
 
       // Figur nicht im Lauffeld -> Figur ist im Zielfeld
 
       if (!(players(sp).getAnzKart() == 0)) {
         val klKart = players(sp).getkleinsteKarte()
 
-        for (fig <- players(sp).ziel) {
+        for (fig <- players(sp).ziel.getFeld()) {
           var pos = fig._2
           var schritt = 4 - pos
 
           // ------------
-          var l = players(sp).ziel.map(_.swap)
+          var l = players(sp).ziel.getFeld().map(_.swap)
 
           if (klKart <= schritt) {
             var belegt = false

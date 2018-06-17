@@ -11,3 +11,7 @@ trait SwingGuiInterfaces {
 trait TuiInterfaces {
   def tui_v1(lF: Lauffeld, p: ArrayBuffer[Spieler])
 }
+
+trait FensterInterface{
+  def zeig_anleitung(text: String)
+}

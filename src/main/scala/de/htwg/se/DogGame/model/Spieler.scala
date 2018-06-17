@@ -5,13 +5,15 @@ class Spieler(id: Int, st: Int) {
   import scala.collection.mutable.ArrayBuffer
   import main.scala.de.htwg.se.DogGame.model.Spielfigur
   import main.scala.de.htwg.se.DogGame.model.Karten
+  import main.scala.de.htwg.se.DogGame.model.Startfeld
+  import main.scala.de.htwg.se.DogGame.model.Zielfeld
   
   val spielerId = id;
 
   //var karten = ArrayBuffer[Int]();
-  var karten = new Karten()
-  var start = collection.mutable.Map[Spielfigur, Int]();
-  var ziel = collection.mutable.Map[Spielfigur, Int]();
+  var karten = new Karten() 
+  var start = new Startfeld() //collection.mutable.Map[Spielfigur, Int]();
+  var ziel = new Zielfeld() //collection.mutable.Map[Spielfigur, Int]();
   var figuren = ArrayBuffer[Spielfigur]();
   
   val startPos = st;
@@ -35,22 +37,22 @@ class Spieler(id: Int, st: Int) {
       spielerId match {
         case 1 => {
           var fig1 = new Spielfigur("B" + i) 
-          start += ((fig1, i))
+          start.getFeld() += ((fig1, i))
           figuren += fig1  
         }
         case 2 => {
           var fig2 = new Spielfigur("R" + i)
-          start += ((fig2, i))
+          start.getFeld() += ((fig2, i))
           figuren += fig2
           }
         case 3 => {
           var fig3 = new Spielfigur("G" + i)
-          start += ((fig3, i))
+          start.getFeld() += ((fig3, i))
           figuren += fig3
         }
         case 4 => {
           var fig4 = new Spielfigur("S" + i)
-          start += ((fig4, i))
+          start.getFeld() += ((fig4, i))
           figuren += fig4
         }
       }
@@ -58,11 +60,11 @@ class Spieler(id: Int, st: Int) {
   }
 
   def getStart(): collection.mutable.Map[Spielfigur, Int] = {
-    return start;
+    return start.getFeld();
   }
 
   def getZiel(): collection.mutable.Map[Spielfigur, Int] = {
-    return ziel;
+    return ziel.getFeld();
   }
 
   //def setKarte(kar: Int) {
@@ -70,11 +72,11 @@ class Spieler(id: Int, st: Int) {
   //}
   
   def setKarte(kar: Int) {
-    karten.getKarten() += kar
+    karten.setKarte(kar)
   }
   
   def getAnzKart(): Int = {
-    return karten.getKarten().length;
+    return karten.getAnzKart()
   }
 
   def getKarten(): ArrayBuffer[Int] = {
@@ -120,10 +122,10 @@ class Spieler(id: Int, st: Int) {
 
     var check = false
     
-    if (start.contains(fig))
+    if (start.getFeld().contains(fig))
       
       check = true
-      start -= (fig)
+      start.getFeld() -= (fig)
 
     return check
 
@@ -135,7 +137,7 @@ class Spieler(id: Int, st: Int) {
   
   def alleImZiel(): Boolean = {
     
-    if(ziel.size == 4)
+    if(ziel.getFeld().size == 4)
       return true
     
     return false

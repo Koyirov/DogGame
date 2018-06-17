@@ -1,14 +1,11 @@
 package main.scala.de.htwg.se.DogGame.view
 
-import javax.swing.JScrollBar
-import scala.collection.mutable.ArrayBuffer
 import scala.swing._
-//used to listen
 import scala.swing.event._
 import scala.swing.BorderPanel.Position._
 
 
-class Fenster extends MainFrame {
+class Fenster extends MainFrame with FensterInterface{
 
   title = "DogGame Anleitung"
   //size_=(new Dimension(1280, 720))
@@ -49,7 +46,7 @@ class Fenster extends MainFrame {
       }
   }
   
-  def zeig_anleitung(text: String) {
+  override def zeig_anleitung(text: String) {
     textHinweis.text_=(text)
   }
   

@@ -7,6 +7,7 @@ trait FeldInterfaces {
   import main.scala.de.htwg.se.DogGame.model.Spielfigur
   
   //die Variable gehoert nur zu Zielfeld
+  var feld = collection.mutable.Map[Spielfigur, Int]() 
   var ziel = collection.mutable.Map[String, Int]();
 
   def getFeld: collection.mutable.Map[Spielfigur, Int]
@@ -27,10 +28,6 @@ trait KartenInterfaces {
   def setKarte(kar: Int)
   def getAnzKart: Int
   def getKarten: ArrayBuffer[Int]
-  def getkleinsteKarte: Int
-  def getKartenAusgabe: String
-  def delKarte(kar: Int)
-  def delAllKarte
 }
 
 trait SpielbrettInterfaces {
