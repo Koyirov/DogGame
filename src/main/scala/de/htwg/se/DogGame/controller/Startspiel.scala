@@ -2,7 +2,7 @@ package main.scala.de.htwg.se.DogGame.controller
 
 import main.scala.de.htwg.se.DogGame.model.Lauffeld
 
-case class Startspiel(guiBoolean: Boolean) extends StartspielInterface{
+case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
 
   import scala.collection.mutable.ArrayBuffer
   import _root_.main.scala.de.htwg.se.DogGame.model.Spieler
@@ -13,7 +13,7 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface{
   import _root_.main.scala.de.htwg.se.DogGame.view.SwingGui
   import _root_.main.scala.de.htwg.se.DogGame.controller.{ Operationlogik => op_log }
   import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
-  import org.apache.logging.log4j.{ LogManager, Logger, Level}
+  import org.apache.logging.log4j.{ LogManager, Logger, Level }
 
   var tuiIns = Tui()
   //var guiIns = new SwingGui()
@@ -475,26 +475,24 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface{
 
       } else if (spBrett.revert7) {
         laufFeld.setFeld(spBrett.get_spiel_Lauf_Feld().getFeld())
+        var oldPlayers = spBrett.get_spiel_Player()
         if (guiBoolean) {
-          guiIns.update_Spiel_Brett(laufFeld, players, sp + 1)
+          guiIns.update_Spiel_Brett(laufFeld, oldPlayers, sp + 1)
         } else {
           tuiIns.tui_v1(laufFeld, players)
         }
-        var newPlayers = spBrett.get_spiel_Player()
         spBrett.revert7 = false
         spBrett.remove_Spiel_Brett()
         if (!guiBoolean) {
           println("Jetzt eine neue Karte angeben.(7)")
         }
-        return (newPlayers, false)
+        return (oldPlayers, false)
       } else {
         if (!guiBoolean) {
           println("Jetzt eine neue Karte angeben.")
         }
         return (null, false)
       }
-
     }
-
   }
 }
