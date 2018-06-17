@@ -1,28 +1,26 @@
 package main.scala.de.htwg.se.DogGame.model
 
-class Spieler(id: Int, st: Int) {
+class Spieler(id: Int, st: Int) extends SpielerInterfaces{
  
   import scala.collection.mutable.ArrayBuffer
   import main.scala.de.htwg.se.DogGame.model.Spielfigur
   import main.scala.de.htwg.se.DogGame.model.Karten
-  import main.scala.de.htwg.se.DogGame.model.Startfeld
-  import main.scala.de.htwg.se.DogGame.model.Zielfeld
   
-  val spielerId = id;
-
-  //var karten = ArrayBuffer[Int]();
-  var karten = new Karten() 
-  var start = new Startfeld() //collection.mutable.Map[Spielfigur, Int]();
-  var ziel = new Zielfeld() //collection.mutable.Map[Spielfigur, Int]();
-  var figuren = ArrayBuffer[Spielfigur]();
+  private var spielerId = id;
+  private var startPos = st
   
-  val startPos = st;
+  private var karten = new Karten() 
+  private var start = collection.mutable.Map[Spielfigur, Int]();
+  private var ziel = collection.mutable.Map[Spielfigur, Int]();
+  private var figuren = ArrayBuffer[Spielfigur]();
+  
+  
 
-  def getId(): Int = {
+  override def getId(): Int = {
     return spielerId;
   }
 
-  def getName(): String = {
+  override def getName(): String = {
     spielerId match {
       case 1 => return "B"
       case 2 => return "R"
@@ -32,58 +30,54 @@ class Spieler(id: Int, st: Int) {
     }
   }
 
-  def setStart() {
+  override def setStart() {
     for (i <- 1 to 4) {
       spielerId match {
         case 1 => {
           var fig1 = new Spielfigur("B" + i) 
-          start.getFeld() += ((fig1, i))
+          start += ((fig1, i))
           figuren += fig1  
         }
         case 2 => {
           var fig2 = new Spielfigur("R" + i)
-          start.getFeld() += ((fig2, i))
+          start += ((fig2, i))
           figuren += fig2
           }
         case 3 => {
           var fig3 = new Spielfigur("G" + i)
-          start.getFeld() += ((fig3, i))
+          start += ((fig3, i))
           figuren += fig3
         }
         case 4 => {
           var fig4 = new Spielfigur("S" + i)
-          start.getFeld() += ((fig4, i))
+          start += ((fig4, i))
           figuren += fig4
         }
       }
     }
   }
 
-  def getStart(): collection.mutable.Map[Spielfigur, Int] = {
-    return start.getFeld();
+  override def getStart(): collection.mutable.Map[Spielfigur, Int] = {
+    return start
   }
 
-  def getZiel(): collection.mutable.Map[Spielfigur, Int] = {
-    return ziel.getFeld();
+  override def getZiel(): collection.mutable.Map[Spielfigur, Int] = {
+    return ziel
   }
-
-  //def setKarte(kar: Int) {
-    //karten += kar
-  //}
   
-  def setKarte(kar: Int) {
+  override def setKarte(kar: Int) {
     karten.setKarte(kar)
   }
   
-  def getAnzKart(): Int = {
+  override def getAnzKart(): Int = {
     return karten.getAnzKart()
   }
 
-  def getKarten(): ArrayBuffer[Int] = {
+  override def getKarten(): ArrayBuffer[Int] = {
     return karten.getKarten();
   }
   
-  def getkleinsteKarte(): Int = {
+  override def getkleinsteKarte(): Int = {
     if(karten.getKarten().contains(14))
       return 1
 
@@ -100,7 +94,7 @@ class Spieler(id: Int, st: Int) {
     return karten.getKarten().min
   }
 
-  def getKartenAusgabe(): String = {
+  override def getKartenAusgabe(): String = {
     var hand = "Deine Handkarten: "
 
     for (i <- karten.getKarten()) {
@@ -110,40 +104,40 @@ class Spieler(id: Int, st: Int) {
     return hand;
   }
 
-  def delKarte(kar: Int) {
+  override def delKarte(kar: Int) {
     karten.getKarten() -= kar
   }
   
-  def delAllKarte() {
+  override def delAllKarte() {
     karten.getKarten().clear()
   }
 
-  def delFigur(fig: Spielfigur): Boolean = {
+  override def delFigur(fig: Spielfigur): Boolean = {
 
     var check = false
     
-    if (start.getFeld().contains(fig))
+    if (start.contains(fig))
       
       check = true
-      start.getFeld() -= (fig)
+      start -= (fig)
 
     return check
 
   }
 
-  def getStartPos(): Int = {
+  override def getStartPos(): Int = {
     return startPos
   }
   
-  def alleImZiel(): Boolean = {
+  override def alleImZiel(): Boolean = {
     
-    if(ziel.getFeld().size == 4)
+    if(ziel.size == 4)
       return true
     
     return false
   }
   
-  def getFig(fig: String):Spielfigur = {
+  override def getFig(fig: String):Spielfigur = {
   
     for(figur <- figuren){
       if(figur.getFigur().startsWith(fig))
@@ -151,35 +145,4 @@ class Spieler(id: Int, st: Int) {
     }
     return null
   }
-  
-  /*def getFigurS(fig: String):Spielfigur = {
-    var res = 100
-    for(sp <- start.keys){
-      if(sp.getFigur().equals(fig))
-        res = start.get(sp).get
-    }
-    var um_start = start.map(_.swap)
-    
-    if(res != 100){
-      return um_start.get(res).get
-    }else{
-      return null
-    }
-  }
-  
-  def getFigurZ(fig: String):Spielfigur = {
-    var res = 100
-    for(sp <- ziel.keys){
-      if(sp.getFigur().equals(fig))
-        res = ziel.get(sp).get
-    }
-    var um_start = ziel.map(_.swap)
-    
-    if(res != 100){
-      return um_start.get(res).get
-    }else{
-      return null
-    }
-  }*/
-
 }

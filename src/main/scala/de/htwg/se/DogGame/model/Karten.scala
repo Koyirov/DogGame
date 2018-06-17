@@ -10,37 +10,11 @@ class Karten() extends KartenInterfaces{
     karten += kar
   }
 
-  override def getAnzKart(): Int = {
-    return karten.length;
-  }
-
   override def getKarten(): ArrayBuffer[Int] = {
     return karten;
   }
   
-//  def getkleinsteKarte(): Int = {
-//    if(karten.contains(14))
-//      return 1
-//      
-//    return karten.min
-//  }
-
-//  def getKartenAusgabe(): String = {
-//    var hand = "Deine Handkarten: "
-//
-//    for (i <- karten) {
-//      hand += i.toString() + ", "
-//    }
-//
-//    return hand;
-//  }
-//
-//  def delKarte(kar: Int) {
-//    karten -= kar
-//  }
-//  
-//  def delAllKarte() {
-//    karten.clear()
-//  }
-
+  def getAnzKart(): Int = {
+    return karten.length;
+  }
 }
