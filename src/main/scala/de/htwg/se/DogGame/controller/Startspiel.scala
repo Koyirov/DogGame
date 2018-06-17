@@ -2,7 +2,7 @@ package main.scala.de.htwg.se.DogGame.controller
 
 import main.scala.de.htwg.se.DogGame.model.Lauffeld
 
-case class Startspiel(guiBoolean: Boolean) {
+case class Startspiel(guiBoolean: Boolean) extends StartspielInterface{
 
   import scala.collection.mutable.ArrayBuffer
   import _root_.main.scala.de.htwg.se.DogGame.model.Spieler
@@ -16,13 +16,13 @@ case class Startspiel(guiBoolean: Boolean) {
   import org.apache.logging.log4j.{ LogManager, Logger, Level}
 
   var tuiIns = Tui()
-  var guiIns = new SwingGui()
+  //var guiIns = new SwingGui()
   val logger: Logger = LogManager.getLogger(this.getClass.getName)
 
   //var revert7 = false
 
   // Alle Lauffelder mit spBrett.get_spiel_Lauf_Feld() ersetzt
-  def start_spiel() {
+  override def start_spiel() {
     logger.log(Level.INFO, "start_spiel(): Spiel getartet")
     //var kartenStapel = ArrayBuffer[Int]()
     var kartenStapel = new Karten()
@@ -442,6 +442,7 @@ case class Startspiel(guiBoolean: Boolean) {
       }
       //TODO:
       //if (!gui_ausgabe.startsWith("Keine moegliche Startkarte")) {
+      Thread.sleep(500L)
       spKart = Benutzerinput(guiBoolean, guiIns).karte_waehlen()
       //} else {
       //var ausg = ""

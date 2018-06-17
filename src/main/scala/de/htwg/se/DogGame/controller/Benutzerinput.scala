@@ -15,6 +15,7 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
     var gui_prefix = ""
     while (!check1) {
       var figStr = ""
+      Thread.sleep(500L)
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=(gui_prefix + "Waehle eine Figur.")
         if (guiIns.feld_inhalt_lfb != "") {
@@ -81,10 +82,11 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
     guiIns.frame_comp.nutzerEingabe.editable_=(true)
     var opt = -1
     var check2 = false
-    while (check2 == false) {
+    while (!check2) {
       var optStr = ""
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=(ausg + "Waehle eine Option aus!")
+        Thread.sleep(500L)
         if (guiIns.feld_inhalt_tab != "") {
           optStr = guiIns.feld_inhalt_tab
           guiIns.feld_inhalt_tab = ""
@@ -101,6 +103,7 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
         var optStr = ""
         if (guiBoolean) {
           guiIns.frame_comp.textLabel.text_=(ausg + "Waehle eine Option aus!")
+          Thread.sleep(500L)
           if (guiIns.feld_inhalt_tab != "") {
             optStr = guiIns.feld_inhalt_tab
             guiIns.feld_inhalt_tab = ""
@@ -138,6 +141,7 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=("Bitte eine Zahl eingeben. (4)")
         if (guiIns.feld_inhalt_tab != "") {
+          Thread.sleep(500L)
           s = StrToIntK(guiIns.feld_inhalt_tab)
           guiIns.feld_inhalt_tab = ""
         }
@@ -176,6 +180,7 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=("Waehle eine Karte aus die der Joker sein soll.")
         if (guiIns.feld_inhalt_tab != "") {
+          Thread.sleep(500L)
           s = StrToIntK(guiIns.feld_inhalt_tab)
           guiIns.feld_inhalt_tab = ""
         }

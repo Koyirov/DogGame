@@ -357,6 +357,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         } else {
           guiIns.frame_comp.textLabel.text_=(gui_prefix + "Figur von anderem Spieler waehlen!")
         }
+        Thread.sleep(500L)
         fig_name = Benutzerinput(guiBoolean, guiIns).spFigur_waehlen_gui()
       } else {
         println("Diese Figur kann man nicht tauschen.")
