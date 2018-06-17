@@ -61,7 +61,7 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
       kartenStapel.getKarten().clear()
       for (wert <- 1 to 14) {
         for (anz <- 1 to 4) {
-          kartenStapel.getKarten() += wert
+          kartenStapel.setKarte(wert)
 
         }
 
@@ -153,7 +153,7 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
           for (fig <- laufFeld.getFeld()) {
             //wenn figur geschützt ist , nicht tauschen
             var geschuetzt = false
-            if (laufFeld.getFeld().map(_.swap).get(players(sp).startPos) != None) {
+            if (laufFeld.getFeld().map(_.swap).get(players(sp).getStartPos()) != None) {
               geschuetzt = true
             }
 
@@ -378,19 +378,19 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
     // im ziel blockiert
     var bl = false
 
-    if (!players(sp).ziel.getFeld().isEmpty) {
+    if (!players(sp).getZiel().isEmpty) {
 
       // Figur nicht im Lauffeld -> Figur ist im Zielfeld
 
       if (!(players(sp).getAnzKart() == 0)) {
         val klKart = players(sp).getkleinsteKarte()
 
-        for (fig <- players(sp).ziel.getFeld()) {
+        for (fig <- players(sp).getZiel()) {
           var pos = fig._2
           var schritt = 4 - pos
 
           // ------------
-          var l = players(sp).ziel.getFeld().map(_.swap)
+          var l = players(sp).getZiel().map(_.swap)
 
           if (klKart <= schritt) {
             var belegt = false
@@ -478,7 +478,7 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
         players(sp).delKarte(sK)
         return (null, true)
 
-      } else if (spBrett.revert7) {
+      } else if (spBrett.get_revert7()) {
         laufFeld.setFeld(spBrett.get_spiel_Lauf_Feld().getFeld())
         var oldPlayers = spBrett.get_spiel_Player()
         if (guiBoolean) {
@@ -486,7 +486,7 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
         } else {
           tuiIns.tui_v1(laufFeld, players)
         }
-        spBrett.revert7 = false
+        spBrett.set_revert7(false)
         spBrett.remove_Spiel_Brett()
         if (!guiBoolean) {
           println("Jetzt eine neue Karte angeben.(7)")
