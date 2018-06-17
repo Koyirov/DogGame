@@ -1,16 +1,16 @@
 package main.scala.de.htwg.se.DogGame.view
 
-case class Tui() {
+case class Tui() extends TuiInterfaces {
   
   import scala.collection.mutable.ArrayBuffer
   import main.scala.de.htwg.se.DogGame.model.Spieler
   import main.scala.de.htwg.se.DogGame.model.Spielfigur
-  import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
+  import main.scala.de.htwg.se.DogGame.model.Lauffeld
   import org.apache.logging.log4j.{ LogManager, Logger, Level}
   
   val logger: Logger = LogManager.getLogger(this.getClass.getName)
   
-  def tui_v1(lF: Lauffeld, p: ArrayBuffer[Spieler]) {
+  override def tui_v1(lF: Lauffeld, p: ArrayBuffer[Spieler]) {
     
     logger.log(Level.INFO, "tui_v1() zeigt auktuelle Spiel Zustand")
     var l = lF.getFeld().map(_.swap)

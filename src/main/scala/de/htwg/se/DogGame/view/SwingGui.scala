@@ -13,14 +13,12 @@ import javax.swing.UIManager
 import javax.swing.border.Border
 import java.awt
 import scala.collection.mutable.ArrayBuffer
-import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
 import main.scala.de.htwg.se.DogGame.model.Spieler
 import main.scala.de.htwg.se.DogGame.model.Spielfigur
 import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
 
-
 //object SwingGui extends SimpleSwingApplication {
-class SwingGui extends MainFrame {
+class SwingGui extends MainFrame with SwingGuiInterfaces{
 
   import _root_.main.scala.de.htwg.se.DogGame.view.FrameComp
   
@@ -140,7 +138,7 @@ class SwingGui extends MainFrame {
     }
   }
 
-  def update_Spiel_Brett(lF: Lauffeld, p: ArrayBuffer[Spieler], turn: Int) {
+  override def update_Spiel_Brett(lF: Lauffeld, p: ArrayBuffer[Spieler], turn: Int) {
     aktueller_turn = turn
 
     var l = lF.getFeld().map(_.swap)
