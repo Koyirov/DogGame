@@ -175,20 +175,24 @@ case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
   def waehle_Joker(): Int = {
     guiIns.frame_comp.nutzerEingabe.editable_=(true)
     var s = StrToIntK("")
+    var ausg = ""
 
-    while (s == None) {
+    do{
       if (guiBoolean) {
-        guiIns.frame_comp.textLabel.text_=("Waehle eine Karte aus die der Joker sein soll.")
+        guiIns.frame_comp.textLabel.text_=(ausg + "Waehle eine Karte aus die der Joker sein soll.")
         if (guiIns.feld_inhalt_tab != "") {
           Thread.sleep(500L)
           s = StrToIntK(guiIns.feld_inhalt_tab)
           guiIns.feld_inhalt_tab = ""
+          ausg = "Falsche Eingabe! "
         }
       } else {
-        println("Waehle eine Karte aus die der Joker sein soll.")
+        println(ausg + "Waehle eine Karte aus die der Joker sein soll.")
         s = StrToIntK(scala.io.StdIn.readLine())
+        ausg = "Falsche Eingabe! "
       }
-    }
+      
+    }while (s == None || s.get < 1 || s.get > 13) 
 
     return s.get
   }

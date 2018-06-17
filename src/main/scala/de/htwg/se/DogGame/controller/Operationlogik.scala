@@ -20,16 +20,8 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     logger.log(Level.INFO, "ausfuehren14(): ueberprueft, ob Karte Jocker ist")
     var karteE = karte
     if (karte == 14) {
-
       var opt = Benutzerinput(guiBoolean, guiIns).waehle_Joker()
-      while (opt == 14 || (opt <= 1 && opt >= 13)) {
-        if (!guiBoolean) {
-          println("Falsche Eingabe! Waehle eine Karte aus, die der Joker sein soll.")
-        }
-        opt = Benutzerinput(guiBoolean, guiIns).waehle_Joker()
-      }
       karteE = opt
-
     }
     return ausfuehren(lF, karteE, spieler, alleSp, spBrett)
   }
@@ -102,7 +94,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       case 7 => {
 
         var parlF = new Lauffeld()
-        parlF.setFeld(lF.getFeld())
+        parlF.setFeld(lF.getFeld()) 
         spBrett.set_spiel_Lauf_Feld(parlF)
         spBrett.set_spiel_Player(alleSp)
 
