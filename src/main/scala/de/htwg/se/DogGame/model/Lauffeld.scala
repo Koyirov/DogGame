@@ -23,7 +23,7 @@ class Lauffeld extends FeldInterfaces{
   }
   
   override def setFeld(lF: collection.mutable.Map[Spielfigur, Int]){
-    feld.clear()
+    feld.clear() 
     feld ++= lF
   }
   
