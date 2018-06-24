@@ -7,16 +7,32 @@ import main.scala.de.htwg.se.DogGame.model.Spielbrett
 import main.scala.de.htwg.se.DogGame.model.Spielfigur
 import main.scala.de.htwg.se.DogGame.view.SwingGui
 import scala.util.control.Breaks._
-import org.apache.logging.log4j.{ LogManager, Logger, Level}
+import org.apache.logging.log4j.{ LogManager, Logger, Level }
+import main.scala.de.htwg.se.DogGame.model.LauffeldInterfaces
+import main.scala.de.htwg.se.DogGame.model.SpielerInterfaces
+import main.scala.de.htwg.se.DogGame.model.LauffeldInterfaces
+import main.scala.de.htwg.se.DogGame.model.LauffeldInterfaces
+import main.scala.de.htwg.se.DogGame.model.LauffeldInterfaces
 
 case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
-  
+
   import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
   import scala.collection.mutable.ArrayBuffer
   
+  import com.google.inject.Guice
+  import main.scala.de.htwg.se.DogGame.DependencyModule
+  val injector = Guice.createInjector(new DependencyModule(guiBoolean))
+  //var figurInterface = injector.getInstance(classOf[Spielfigur])
+  var lFInterface = injector.getInstance(classOf[Lauffeld])
+  //var spInterface = injector.getInstance(classOf[Spieler])
+  
+  //var figurInterface = new Spielfigur()
+  //var lFInterface = new Lauffeld()
+  //var spInterface = new Spieler()
+
   val logger: Logger = LogManager.getLogger(this.getClass.getName)
 
-  def ausfuehren14(lF: Lauffeld, karte: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
+  def ausfuehren14(lF: LauffeldInterfaces, karte: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
     logger.log(Level.INFO, "ausfuehren14(): ueberprueft, ob Karte Jocker ist")
     var karteE = karte
     if (karte == 14) {
@@ -26,8 +42,8 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     return ausfuehren(lF, karteE, spieler, alleSp, spBrett)
   }
 
-  def ausfuehren(lF: Lauffeld, karte: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
-    
+  def ausfuehren(lF: LauffeldInterfaces, karte: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
+
     logger.log(Level.INFO, "ausfuehren(): Karten werden abgefangen")
     var tmp = spieler.getName() + Benutzerinput(guiBoolean, guiIns).figur_waehlen()
     var fig = spieler.getFig(tmp)
@@ -56,7 +72,6 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
             "1 -> 1 Schritt im Lauffeld weiter laufen.\n" +
             "11 -> 11 Schritte im Lauffeld weiter laufen.\n"
 
-          //TODO:
           opt = Benutzerinput(guiBoolean, guiIns).opt_waehlen(ausg)
         } while (opt != 0 && opt != 11 && opt != 1)
 
@@ -80,7 +95,6 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
           val ausg = "14 -> 4 Schritte im Lauffeld Rueckwaerts laufen.\n" +
             "4 -> 4 Schritte im Lauffeld weiter laufen.\n"
 
-          //TODO:
           opt = Benutzerinput(guiBoolean, guiIns).opt_waehlen(ausg)
         } while (opt != 14 && opt != 4)
 
@@ -93,15 +107,20 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       }
       case 7 => {
 
-        var parlF = new Lauffeld()
-        parlF.setFeld(lF.getFeld()) 
+        var parlF = lFInterface
+        parlF.setFeld(lF.asInstanceOf[Lauffeld].getFeld())
+        var alteSp = injector.getInstance(classOf[SpielerInterfaces])
+        alteSp.setZiel(spieler.getZiel())
+        alteSp.setStart(spieler.getStart())
+        alteSp.setKarten(spieler.getKarten())
         spBrett.set_spiel_Lauf_Feld(parlF)
-        spBrett.set_spiel_Player(alleSp)
+        spBrett.set_spiel_Player(alteSp)
 
         for (i <- 1 to 7) {
           // optionen bestimmen
           if (!laufen7(lF, fig, spieler, alleSp, spBrett)) {
             spBrett.set_revert7(true)
+            spieler.setZiel(alteSp.asInstanceOf[Spieler].getZiel())
             return false
           }
 
@@ -129,7 +148,6 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
           }
           val ausg = "0 -> Aus Startfeld rausgehen.\n" +
             "13 -> 13 Schritte im Lauffeld weiter laufen.\n"
-          //TODO:
           opt = Benutzerinput(guiBoolean, guiIns).opt_waehlen(ausg)
         } while (opt != 0 && opt != 13)
 
@@ -148,32 +166,31 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     }
   }
 
-  def schickStart(lF: Lauffeld, alleSp: ArrayBuffer[Spieler], pos: Int) = {
-    logger.log(Level.INFO, "schickStart(): Figur wir zu Startfeld geschiekct.")
+  def schickStart(lF: LauffeldInterfaces, alleSp: ArrayBuffer[Spieler], pos: Int) = {
+    logger.log(Level.INFO, "schickStart(): Figur wird zu Startfeld geschickt.")
     // get figur
-    var fig = new Spielfigur("0")
-    for ((k, v) <- lF.getFeld()) {
+    
+    var fig = new Spielfigur().setSpielfigur("0")
+    for ((k, v) <- lF.asInstanceOf[Lauffeld].getFeld()) {
       if (v == pos) {
         fig = k
       }
     }
-    //TODO fehlerbehandlung
     // loesche im lF
-    lF.getFeld() -= ((fig))
+    lF.asInstanceOf[Lauffeld].getFeld() -= ((fig))
 
     // setze in zielSpieler.start
     for (sp <- alleSp) {
       if (fig.getFigur().startsWith(sp.getName())) {
-        sp.getStart()+= ((fig, Integer.valueOf(fig.getFigur().substring(1)))) 
+        sp.getStart() += ((fig, Integer.valueOf(fig.getFigur().substring(1))))
 
       }
     }
   }
-  
-  //TODO: diese Funktion in Lauffeld auch implementiert
-  def lFIstFrei(lF: Lauffeld, p: ArrayBuffer[Spieler], pos: Int): Boolean = {
+
+  def lFIstFrei(lF: LauffeldInterfaces, p: ArrayBuffer[Spieler], pos: Int): Boolean = {
     logger.log(Level.INFO, "lFIstFrei(): Ueberprueft ob Lauffeld frei ist wir zu Startfeld geschiekct.")
-    var l = lF.getFeld().clone().map(_.swap)
+    var l = lF.asInstanceOf[Lauffeld].getFeld().clone().map(_.swap)
     for (einer <- p) {
       //auf einer startposition
       if (pos == einer.getStartPos()) {
@@ -192,7 +209,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     return true
   }
 
-  def laufen0(lF: Lauffeld, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
+  def laufen0(lF: LauffeldInterfaces, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
     logger.log(Level.INFO, "laufen0(): Aus Startfeld rausgehen.")
     if (!spieler.delFigur(figur)) {
       if (guiBoolean) {
@@ -208,16 +225,16 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     }
 
     //aus dem start gehen
-    lF.getFeld() += ((figur, spieler.getStartPos()))
+    lF.asInstanceOf[Lauffeld].getFeld() += ((figur, spieler.getStartPos()))
     return true
 
   }
 
-  def laufen7(lF: Lauffeld, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
+  def laufen7(lF: LauffeldInterfaces, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler], spBrett: Spielbrett): Boolean = {
     // 7
     logger.log(Level.INFO, "laufen7(): Option 7.")
-    if (lF.getFeld().contains(figur)) {
-      var pos = lF.getFeld().get(figur)
+    if (lF.asInstanceOf[Lauffeld].getFeld().contains(figur)) {
+      var pos = lF.asInstanceOf[Lauffeld].getFeld().get(figur)
       var erg = (pos.get + 1) % 64
 
       if (!lFIstFrei(lF, alleSp, erg)) {
@@ -229,7 +246,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         return false
       }
 
-      lF.getFeld().remove(figur)
+      lF.asInstanceOf[Lauffeld].getFeld().remove(figur)
 
       var vorPos = 1000
 
@@ -248,7 +265,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         if (lF.posBelegt(erg))
           //figur schlagen
           schickStart(lF, alleSp, erg)
-        lF.getFeld() += ((figur, erg))
+        lF.asInstanceOf[Lauffeld].getFeld() += ((figur, erg))
       }
     } else if (spieler.getZiel().contains(figur)) {
       // Figur nicht im Lauffeld -> Figur ist im Zielfeld
@@ -272,6 +289,9 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
           }
           return false
         }
+      } else {
+
+        return false
       }
     } else {
       // Figur nicht im Lauffeld , Figur ist nicht im Zielfeld -> Figur im Startfeld
@@ -287,12 +307,12 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     return true
   }
 
-  def laufen14(lF: Lauffeld, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
+  def laufen14(lF: LauffeldInterfaces, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
     // 4 zurueck
     logger.log(Level.INFO, "laufen14(): Option 4 ruecklauf.")
-    if (lF.getFeld().contains(figur)) {
-      var pos = lF.getFeld().get(figur)
-      lF.getFeld().remove(figur)
+    if (lF.asInstanceOf[Lauffeld].getFeld().contains(figur)) {
+      var pos = lF.asInstanceOf[Lauffeld].getFeld().get(figur)
+      lF.asInstanceOf[Lauffeld].getFeld().remove(figur)
       var erg = (pos.get - 4)
 
       if (erg < 0) {
@@ -304,7 +324,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       if (lF.posBelegt(erg))
         //figur schlagen
         schickStart(lF, alleSp, erg)
-      lF.getFeld() += ((figur, erg))
+      lF.asInstanceOf[Lauffeld].getFeld() += ((figur, erg))
       return true
     } else {
       //Figur nicht im Lauffeld
@@ -318,10 +338,10 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
 
   }
 
-  def laufen15(lF: Lauffeld, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
+  def laufen15(lF: LauffeldInterfaces, figur: Spielfigur, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
     logger.log(Level.INFO, "laufen15(): Bube, Figur tauschen.")
     var checkAndere = false
-    for (figs <- lF.getFeld().seq) {
+    for (figs <- lF.asInstanceOf[Lauffeld].getFeld().seq) {
       if (!figs._1.getFigur().startsWith(spieler.getName()))
         checkAndere = true
     }
@@ -337,11 +357,10 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
     }
 
     var fig_name = "" //R1
-    var fig2 = new Spielfigur("Z")
+    var fig2 = new Spielfigur().setSpielfigur("Z")
     var gui_prefix = ""
     // Check falls tauschbar
     do {
-      //TODO:
       if (guiBoolean) {
         if (fig_name == "") {
           guiIns.frame_comp.textLabel.text_=("Figur von anderem Spieler waehlen!")
@@ -357,9 +376,9 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       }
       fig2 = lF.getFigur(fig_name)
       gui_prefix = "Diese Figur kann man nicht tauschen.\n"
-    } while ((fig2 == null) || (!lF.getFeld().contains(fig2) && fig2.getFigur().startsWith(spieler.getName())))
+    } while ((fig2 == null) || (!lF.asInstanceOf[Lauffeld].getFeld().contains(fig2) && fig2.getFigur().startsWith(spieler.getName())))
 
-    if (lF.getFeld().get(figur) == None || lF.getFeld().get(fig2) == None) {
+    if (lF.asInstanceOf[Lauffeld].getFeld().get(figur) == None || lF.asInstanceOf[Lauffeld].getFeld().get(fig2) == None) {
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=("Entweder falsche Figur gewählt oder falsche Name eingegeben!")
       } else {
@@ -368,22 +387,22 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
       return false
     }
     // get erledigt
-    var pos = lF.getFeld().get(figur).get
-    var pos2 = lF.getFeld().get(fig2).get
+    var pos = lF.asInstanceOf[Lauffeld].getFeld().get(figur).get
+    var pos2 = lF.asInstanceOf[Lauffeld].getFeld().get(fig2).get
 
-    lF.getFeld().remove(figur)
-    lF.getFeld().remove(fig2)
+    lF.asInstanceOf[Lauffeld].getFeld().remove(figur)
+    lF.asInstanceOf[Lauffeld].getFeld().remove(fig2)
 
-    lF.getFeld() += ((figur, pos2))
-    lF.getFeld() += ((fig2, pos))
+    lF.asInstanceOf[Lauffeld].getFeld() += ((figur, pos2))
+    lF.asInstanceOf[Lauffeld].getFeld() += ((fig2, pos))
     return true
   }
 
-  def laufenN(lF: Lauffeld, figur: Spielfigur, opt: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
+  def laufenN(lF: LauffeldInterfaces, figur: Spielfigur, opt: Int, spieler: Spieler, alleSp: ArrayBuffer[Spieler]): Boolean = {
     logger.log(Level.INFO, "laufenN(): Normal laufen.")
     // im normalfall : 1-13
-    if (lF.getFeld().contains(figur)) {
-      var pos = lF.getFeld().get(figur)
+    if (lF.asInstanceOf[Lauffeld].getFeld().contains(figur)) {
+      var pos = lF.asInstanceOf[Lauffeld].getFeld().get(figur)
       var erg = (pos.get + opt) % 64
 
       //was wenn blockiert
@@ -399,7 +418,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         }
       }
 
-      lF.getFeld().remove(figur)
+      lF.asInstanceOf[Lauffeld].getFeld().remove(figur)
 
       if ((pos.get < spieler.getStartPos() || (spieler.getId() == 1 && pos.get > 4)) && 1 <= (erg - spieler.getStartPos()) % 64 && (erg - spieler.getStartPos()) % 64 <= 4) {
         // Ins Ziel laufen
@@ -432,7 +451,7 @@ case class Operationlogik(guiBoolean: Boolean, guiIns: SwingGui) {
         if (lF.posBelegt(erg))
           //figur schlagen
           schickStart(lF, alleSp, erg)
-        lF.getFeld() += ((figur, erg))
+        lF.asInstanceOf[Lauffeld].getFeld() += ((figur, erg))
       }
     } else if (spieler.getZiel().contains(figur)) {
       // Figur nicht im Lauffeld -> Figur ist im Zielfeld

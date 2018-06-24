@@ -3,11 +3,7 @@ package main.scala.de.htwg.se.DogGame.view
 import scala.collection.mutable.ArrayBuffer
 import scala.swing._
 import scala.swing.BorderPanel.Position._
-//used to listen
 import scala.swing.event._
-import main.scala.de.htwg.se.DogGame.model.Spieler
-import main.scala.de.htwg.se.DogGame.model.Spielfigur
-
   
 class FrameComp{
   

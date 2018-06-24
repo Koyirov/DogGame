@@ -16,6 +16,7 @@ import scala.collection.mutable.ArrayBuffer
 import main.scala.de.htwg.se.DogGame.model.Spieler
 import main.scala.de.htwg.se.DogGame.model.Spielfigur
 import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
+import _root_.main.scala.de.htwg.se.DogGame.model.LauffeldInterfaces
 
 //object SwingGui extends SimpleSwingApplication {
 class SwingGui extends MainFrame with SwingGuiInterface {
@@ -35,11 +36,7 @@ class SwingGui extends MainFrame with SwingGuiInterface {
   var feld_inhalt_kb = ""
   var feld_inhalt_tab = ""
   var tausch_figur = ""
-  /*var wert_verfuegbar_lfb = false
-  var wert_verfuegbar_kb = false
-  var wert_verfuegbar_tab = false*/
 
-  //val lf_buttons = new ArrayBuffer[Button]()
   var lf_buttons = frame_comp.lf_buttons //collection.mutable.Map[Int, Button]()
   var sp_st_zi_fl = frame_comp.sp_st_zi_fl //collection.mutable.Map[String, (ArrayBuffer[Button], ArrayBuffer[Button])]()
   var sp_kar_but = frame_comp.sp_karten
@@ -131,17 +128,16 @@ class SwingGui extends MainFrame with SwingGuiInterface {
             set_inhalt_lfb("", e.source.background)
             set_inhalt_kb("")
             set_tausch_lfb(e.source.text, e.source.background)
-            //frame_comp.nutzerEingabe.text_=(e.source.text)
           }
         }
       }
     }
   }
 
-  override def update_Spiel_Brett(lF: Lauffeld, p: ArrayBuffer[Spieler], turn: Int) {
+  override def update_Spiel_Brett(lF: LauffeldInterfaces, p: ArrayBuffer[Spieler], turn: Int) {
     aktueller_turn = turn
 
-    var l = lF.getFeld().map(_.swap)
+    var l = lF.asInstanceOf[Lauffeld].getFeld().map(_.swap)
 
     /*Um alte Farbe und text zu loeschen von Lauffeld*/
     for (pos <- 0 to 63) {
@@ -228,7 +224,6 @@ class SwingGui extends MainFrame with SwingGuiInterface {
             button.background_=(java.awt.Color.red)
           }
         }
-        //var kar_buttons = sp_kar_but.get(sp_name).get
         for (k <- 0 to 5) {
           kar_buttons(k).background_=(java.awt.Color.red)
           if (k <= sp_karten.length - 1) {
@@ -252,7 +247,6 @@ class SwingGui extends MainFrame with SwingGuiInterface {
             button.background_=(java.awt.Color.green)
           }
         }
-        //var kar_buttons = sp_kar_but.get(sp_name).get
         for (k <- 0 to 5) {
           kar_buttons(k).background_=(java.awt.Color.green)
           if (k <= sp_karten.length - 1) {
@@ -276,7 +270,6 @@ class SwingGui extends MainFrame with SwingGuiInterface {
             button.background_=(java.awt.Color.yellow)
           }
         }
-        //var kar_buttons = sp_kar_but.get(sp_name).get
         for (k <- 0 to 5) {
           kar_buttons(k).background_=(java.awt.Color.yellow)
           if (k <= sp_karten.length - 1) {
@@ -298,29 +291,24 @@ class SwingGui extends MainFrame with SwingGuiInterface {
 
   def set_inhalt_tab(inh: String) {
     feld_inhalt_tab = inh
-    //wert_verfuegbar_tab = true
   }
 
   def set_inhalt_kb(inh: String) {
     feld_inhalt_kb = inh
-    //wert_verfuegbar_kb = true
   }
 
   def set_inhalt_lfb(inh: String, farbe: java.awt.Color) {
     feld_inhalt_lfb = inh
     but_farbe = farbe
-    //wert_verfuegbar_lfb = true
   }
 
   def set_tausch_lfb(inh: String, farbe: java.awt.Color) {
     tausch_figur = inh
     but_farbe = farbe
-    //wert_verfuegbar_lfb = true
   }
   
   def gratualtion_fenster(text: String){
     var textHinweis = new swing.TextArea()
-    //textHinweis.preferredSize_=(new Dimension(250, 100))
     textHinweis.lineWrap_=(true)
     textHinweis.wordWrap_=(true)
     textHinweis.editable_=(false)
@@ -329,8 +317,4 @@ class SwingGui extends MainFrame with SwingGuiInterface {
     contents = textHinweis
   }
 }
-
-
-
-
 

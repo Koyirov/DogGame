@@ -2,12 +2,11 @@ package main.scala.de.htwg.se.DogGame.model
 
 import scala.collection.mutable.ArrayBuffer
 
-trait FeldInterfaces {
+trait LauffeldInterfaces {
   def getFeld: collection.mutable.Map[Spielfigur, Int]
   def posBelegt(pos: Int): Boolean
   def setFeld(lF: collection.mutable.Map[Spielfigur, Int])
-  def lFIstFrei(p: ArrayBuffer[Spieler], pos: Int): Boolean
-  def getFigur(fig: String):Spielfigur
+  def getFigur(fig: String): Spielfigur
 }
 
 trait KartenInterfaces {
@@ -17,23 +16,27 @@ trait KartenInterfaces {
 
 trait SpielbrettInterfaces {
   def set_spiel_Lauf_Feld(spielLF: Lauffeld)
-  def set_spiel_Player(spielPl: ArrayBuffer[Spieler])
+  def set_spiel_Player(spielPl: SpielerInterfaces)
   def set_revert7(revert: Boolean)
   def get_spiel_Lauf_Feld: Lauffeld
-  def get_spiel_Player: ArrayBuffer[Spieler]
+  def get_spiel_Player: Spieler
   def get_revert7: Boolean
   def remove_Spiel_Brett
 }
 
-trait SpielerInterfaces {
+trait SpielerInterfaces{
+  def setSpieler(id: Int, stPos: Int): Spieler
   def getId: Int
   def getName: String
   def setStart
   def getStart: collection.mutable.Map[Spielfigur, Int]
+  def setStart(zielF: collection.mutable.Map[Spielfigur, Int])
   def getZiel: collection.mutable.Map[Spielfigur, Int]
+  def setZiel(zielF: collection.mutable.Map[Spielfigur, Int])
   def setKarte(kar: Int)
   def getAnzKart: Int
   def getKarten: ArrayBuffer[Int]
+  def setKarten(kart: ArrayBuffer[Int])
   def getkleinsteKarte: Int
   def getKartenAusgabe: String
   def delKarte(kar: Int)
@@ -45,5 +48,6 @@ trait SpielerInterfaces {
 }
 
 trait SpielfigurInterfaces {
-    def getFigur: String
+  def setSpielfigur(sp: String): Spielfigur
+  def getFigur: String
 }

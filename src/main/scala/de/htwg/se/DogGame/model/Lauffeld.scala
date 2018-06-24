@@ -1,6 +1,9 @@
 package main.scala.de.htwg.se.DogGame.model
 
-class Lauffeld extends FeldInterfaces{
+import com.google.inject.Inject
+
+@Inject
+class Lauffeld extends LauffeldInterfaces{
  
   import scala.collection.mutable.ArrayBuffer
   import main.scala.de.htwg.se.DogGame.model.Spieler
@@ -25,24 +28,6 @@ class Lauffeld extends FeldInterfaces{
   override def setFeld(lF: collection.mutable.Map[Spielfigur, Int]){
     feld.clear() 
     feld ++= lF
-  }
-  
-  override def lFIstFrei(p: ArrayBuffer[Spieler], pos: Int): Boolean = { 
-
-    var l = feld.map(_.swap)
-    for (einer <- p) {
-      //auf einer startposition
-      if (pos == einer.getStartPos()) {
-        if (l.get(pos) != None) {
-          //die richtige figur auf dieser startPos
-          if (l.get(pos).get.getFigur().startsWith(einer.getName())) {
-            println("Block erkannt.")
-            return false
-          }
-        }
-      }
-    }
-    return true
   }
   
   override def getFigur(fig: String):Spielfigur = {

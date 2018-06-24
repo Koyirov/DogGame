@@ -1,7 +1,9 @@
 package main.scala.de.htwg.se.DogGame.model
 
 import scala.collection.mutable.ArrayBuffer
+import com.google.inject.Inject
 
+@Inject
 class Karten() extends KartenInterfaces{
     
   var karten = ArrayBuffer[Int]()

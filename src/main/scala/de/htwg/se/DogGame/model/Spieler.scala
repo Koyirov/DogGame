@@ -1,21 +1,28 @@
 package main.scala.de.htwg.se.DogGame.model
 
-class Spieler(id: Int, st: Int) extends SpielerInterfaces{
+import com.google.inject.Inject
+
+@Inject
+class Spieler extends SpielerInterfaces{
  
   import scala.collection.mutable.ArrayBuffer
   import main.scala.de.htwg.se.DogGame.model.Spielfigur
   import main.scala.de.htwg.se.DogGame.model.Karten
   
-  private var spielerId = id;
-  private var startPos = st
+  private var spielerId = -1
+  private var startPos = -1
   
   private var karten = new Karten() 
   private var start = collection.mutable.Map[Spielfigur, Int]();
   private var ziel = collection.mutable.Map[Spielfigur, Int]();
   private var figuren = ArrayBuffer[Spielfigur]();
   
+  override def setSpieler(id: Int, st: Int): Spieler ={
+    spielerId = id
+    startPos = st
+    return this
+  }
   
-
   override def getId(): Int = {
     return spielerId;
   }
@@ -34,22 +41,22 @@ class Spieler(id: Int, st: Int) extends SpielerInterfaces{
     for (i <- 1 to 4) {
       spielerId match {
         case 1 => {
-          var fig1 = new Spielfigur("B" + i) 
+          var fig1 = new Spielfigur().setSpielfigur("B" + i)
           start += ((fig1, i))
           figuren += fig1  
         }
         case 2 => {
-          var fig2 = new Spielfigur("R" + i)
+          var fig2 = new Spielfigur().setSpielfigur("R" + i)
           start += ((fig2, i))
           figuren += fig2
           }
         case 3 => {
-          var fig3 = new Spielfigur("G" + i)
+          var fig3 = new Spielfigur().setSpielfigur("G" + i)
           start += ((fig3, i))
           figuren += fig3
         }
         case 4 => {
-          var fig4 = new Spielfigur("S" + i)
+          var fig4 = new Spielfigur().setSpielfigur("S" + i)
           start += ((fig4, i))
           figuren += fig4
         }
@@ -60,13 +67,28 @@ class Spieler(id: Int, st: Int) extends SpielerInterfaces{
   override def getStart(): collection.mutable.Map[Spielfigur, Int] = {
     return start
   }
+  
+  override def setStart(startF: collection.mutable.Map[Spielfigur, Int]){
+    start.clear() 
+    start ++= startF
+  }
 
   override def getZiel(): collection.mutable.Map[Spielfigur, Int] = {
     return ziel
   }
   
+  override def setZiel( zielF: collection.mutable.Map[Spielfigur, Int]) = {
+    ziel.clear()
+    ziel ++= zielF
+  }
+  
   override def setKarte(kar: Int) {
     karten.setKarte(kar)
+  }
+  
+  override def setKarten(kart: ArrayBuffer[Int]) {
+    karten.getKarten().clear()
+    karten.getKarten() ++= kart 
   }
   
   override def getAnzKart(): Int = {

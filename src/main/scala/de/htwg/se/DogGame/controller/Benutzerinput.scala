@@ -2,7 +2,6 @@ package main.scala.de.htwg.se.DogGame.controller
 
 import main.scala.de.htwg.se.DogGame.view.SwingGui
 import scala.util.control.Breaks._
-import main.scala.de.htwg.se.DogGame.model.Spielfigur
 
 case class Benutzerinput(guiBoolean: Boolean, guiIns: SwingGui) {
 

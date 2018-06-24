@@ -1,8 +1,10 @@
 package main.scala.de.htwg.se.DogGame.controller
 
-import main.scala.de.htwg.se.DogGame.model.Lauffeld
+import com.google.inject.Inject
+import main.scala.de.htwg.se.DogGame.model.LauffeldInterfaces
+import main.scala.de.htwg.se.DogGame.model.LauffeldInterfaces
 
-case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
+class Startspiel @Inject() (var guiBoolean: Boolean) extends StartspielInterface {
 
   import scala.collection.mutable.ArrayBuffer
   import _root_.main.scala.de.htwg.se.DogGame.model.Spieler
@@ -10,14 +12,21 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
   import _root_.main.scala.de.htwg.se.DogGame.model.Lauffeld
   import _root_.main.scala.de.htwg.se.DogGame.model.Spielbrett
   import _root_.main.scala.de.htwg.se.DogGame.view.Tui
-  import _root_.main.scala.de.htwg.se.DogGame.view.SwingGui
   import _root_.main.scala.de.htwg.se.DogGame.controller.{ Operationlogik => op_log }
   import main.scala.de.htwg.se.DogGame.controller.Benutzerinput
   import org.apache.logging.log4j.{ LogManager, Logger, Level }
   import scala.swing._
 
+  import com.google.inject.Guice
+  import main.scala.de.htwg.se.DogGame.DependencyModule
+  import _root_.main.scala.de.htwg.se.DogGame.model.LauffeldInterfaces
+  val injector = Guice.createInjector(new DependencyModule(guiBoolean))
+  var lFInterface = injector.getInstance(classOf[LauffeldInterfaces])
+  //var spInterface = injector.getInstance(classOf[Spieler])
+  var kInterface = injector.getInstance(classOf[Karten])
+  var sbInterface = injector.getInstance(classOf[Spielbrett])
+
   var tuiIns = Tui()
-  //var guiIns = new SwingGui()
   val logger: Logger = LogManager.getLogger(this.getClass.getName)
 
   //var revert7 = false
@@ -26,13 +35,13 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
   override def start_spiel() {
     logger.log(Level.INFO, "start_spiel(): Spiel getartet")
     //var kartenStapel = ArrayBuffer[Int]()
-    var kartenStapel = new Karten()
-    var laufFeld = new Lauffeld()
+    var kartenStapel = kInterface
+    var laufFeld = lFInterface
     var players = ArrayBuffer[Spieler]()
     //val kartFiguren = Array("Kreuz", "Pik", "Herz", "Karo")
     var turn = 1
     var karGrenz = 6
-    var spBrett = Spielbrett()
+    var spBrett = sbInterface
 
     // init spieler
     if (guiBoolean) {
@@ -150,10 +159,10 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
           }
 
           var andere = false
-          for (fig <- laufFeld.getFeld()) {
+          for (fig <- laufFeld.asInstanceOf[Lauffeld].getFeld()) {
             //wenn figur geschützt ist , nicht tauschen
             var geschuetzt = false
-            if (laufFeld.getFeld().map(_.swap).get(players(sp).getStartPos()) != None) {
+            if (laufFeld.asInstanceOf[Lauffeld].getFeld().map(_.swap).get(players(sp).getStartPos()) != None) {
               geschuetzt = true
             }
 
@@ -168,10 +177,6 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
             gui_ausgabe += "Keine moegliche Figur vorhanden!(alle Buben)(keine andere Figur)\n"
 
           }
-          /* ueberfluessig, da schon bei startkarte gecheckt
-          if (!km && allB) {
-            println("Keine moegliche Figur vorhanden!(alle Buben)(keine eigene Figur)")
-          }*/
 
           // im ziel blockiert
           var bl = zielBlockiert(sp, players)
@@ -253,8 +258,8 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
   def addSpieler(players: ArrayBuffer[Spieler], anzSp: Int) {
     logger.log(Level.INFO, "addSpieler(): Spieler werden hinzugefuegt")
     for (i <- 1 to anzSp) {
-
-      var p1 = new Spieler(i, (i - 1) * 16);
+      var spInterface = injector.getInstance(classOf[Spieler])
+      var p1 = spInterface.setSpieler(i, (i - 1) * 16);
       players += p1;
 
     }
@@ -278,7 +283,7 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
     }
   }
 
-  def tauscheKarte(players: ArrayBuffer[Spieler], laufFeld: Lauffeld) {
+  def tauscheKarte(players: ArrayBuffer[Spieler], laufFeld: LauffeldInterfaces) {
     logger.log(Level.INFO, "tauscheKarte() Spieler tauschen Karten")
     //init
     var tauschKarten = Array[Int](0, 0, 0, 0)
@@ -301,7 +306,6 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
           println(players(sp).getKartenAusgabe())
         }
 
-        //TODO:
         var tKart = ""
         if (!guiBoolean) {
           tKart = scala.io.StdIn.readLine()
@@ -349,11 +353,11 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
     }
   }
 
-  def getBestPos(laufFeld: Lauffeld, sp: Int, players: ArrayBuffer[Spieler]): Int = {
+  def getBestPos(laufFeld: LauffeldInterfaces, sp: Int, players: ArrayBuffer[Spieler]): Int = {
 
     var bestePos = 0
 
-    for (fig <- laufFeld.getFeld()) {
+    for (fig <- laufFeld.asInstanceOf[Lauffeld].getFeld()) {
       if (fig._1.getFigur().startsWith(players(sp).getName())) {
 
         var break = false
@@ -409,7 +413,7 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
     return bl
   }
 
-  def spielZugErfolgreich(laufFeld: Lauffeld, sp: Int, players: ArrayBuffer[Spieler],
+  def spielZugErfolgreich(laufFeld: LauffeldInterfaces, sp: Int, players: ArrayBuffer[Spieler],
     spBrett: Spielbrett, gui_ausgabe: String): (ArrayBuffer[Spieler], Boolean) = {
     logger.log(Level.INFO, "spielZugErfolgreich() gewaehlte Karte wird gespielt")
     // karten anzeigen
@@ -418,7 +422,6 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
       println("Ass = 1, Bube = 11, Dame = 12, Koenig = 13, Joker = 14, 0 = keine moegliche")
       println(players(sp).getKartenAusgabe())
     }
-    //TODO: aus 3 u 2 nicht benutzt
     val aus1 = "Du bist dran: " + players(sp).getName() + "\n"
     val aus2 = "Ass = 1, Bube = 11, Dame = 12, Koenig = 13, Joker = 14, 0 = keine moegliche\n"
     val aus3 = players(sp).getKartenAusgabe() + "\n"
@@ -433,29 +436,17 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
     } else {
       println("Waehle eine Karte zum Spielen aus.")
     }
-    //TODO
     var spKart = Benutzerinput(guiBoolean, guiIns).karte_waehlen()
     while (spKart == None || (!players(sp).getKarten().contains(spKart.get) && spKart.get != 0)) {
 
       if (guiBoolean) {
         guiIns.frame_comp.textLabel.text_=(gui_ausgabe + aus1 + aus4)
-        //TODO: ", du hast nicht diese Karte.\n" +
-        //"Waehle eine Karte zum Spielen aus.")
       } else {
         println("Du hast nicht diese Karte.")
         println("Waehle eine Karte zum Spielen aus.")
       }
-      //TODO:
-      //if (!gui_ausgabe.startsWith("Keine moegliche Startkarte")) {
       Thread.sleep(500L)
       spKart = Benutzerinput(guiBoolean, guiIns).karte_waehlen()
-      //} else {
-      //var ausg = ""
-      /*if (players(sp).getStart().size + players(sp).getZiel().size != 4) {
-          spKart = Benutzerinput(guiBoolean, guiIns).karte_waehlen()
-          spKart = Option[Int](Benutzerinput(guiBoolean, guiIns).opt_waehlen(ausg))
-        }*/
-      //}
     }
     // spkart.get ist gecheckt
     var sK = spKart.get
@@ -480,11 +471,17 @@ case class Startspiel(guiBoolean: Boolean) extends StartspielInterface {
 
       } else if (spBrett.get_revert7()) {
         laufFeld.setFeld(spBrett.get_spiel_Lauf_Feld().getFeld())
-        var oldPlayers = spBrett.get_spiel_Player()
+        //players-=(players(sp))
+        var neuerSp = spBrett.get_spiel_Player()
+        var oldPlayers = new ArrayBuffer[Spieler]
+        oldPlayers ++= players
+        oldPlayers(sp).setZiel(neuerSp.getZiel())
+        oldPlayers(sp).setStart(neuerSp.getStart())
+        oldPlayers(sp).setKarten(neuerSp.getKarten())
         if (guiBoolean) {
           guiIns.update_Spiel_Brett(laufFeld, oldPlayers, sp + 1)
         } else {
-          tuiIns.tui_v1(laufFeld, players)
+          tuiIns.tui_v1(laufFeld, oldPlayers)
         }
         spBrett.set_revert7(false)
         spBrett.remove_Spiel_Brett()

@@ -6,14 +6,15 @@ case class Tui() extends TuiInterface {
   import main.scala.de.htwg.se.DogGame.model.Spieler
   import main.scala.de.htwg.se.DogGame.model.Spielfigur
   import main.scala.de.htwg.se.DogGame.model.Lauffeld
+  import main.scala.de.htwg.se.DogGame.model.LauffeldInterfaces
   import org.apache.logging.log4j.{ LogManager, Logger, Level}
   
   val logger: Logger = LogManager.getLogger(this.getClass.getName)
   
-  override def tui_v1(lF: Lauffeld, p: ArrayBuffer[Spieler]) {
+  override def tui_v1(lF: LauffeldInterfaces, p: ArrayBuffer[Spieler]) {
     
     logger.log(Level.INFO, "tui_v1() zeigt auktuelle Spiel Zustand")
-    var l = lF.getFeld().map(_.swap)
+    var l = lF.asInstanceOf[Lauffeld].getFeld().map(_.swap)
 
     println("Spielfeld:")
     println("                                                            " + sz(p, 2, 0, 1) + "  " + sz(p, 2, 0, 2) + "  " + sz(p, 2, 0, 3) + "  " + sz(p, 2, 0, 4) + "           ")
@@ -59,7 +60,6 @@ case class Tui() extends TuiInterface {
   def pos(l: collection.mutable.Map[Int, Spielfigur], p: ArrayBuffer[Spieler], pos: Int): String = {
     logger.log(Level.INFO, "pos() bestimmt, ob ein Figur sich in angegeben Position befindet")
     if (l.contains(pos))
-      // TODO option auspacken
       return l.get(pos).get.getFigur()
     else
       return "■ "
@@ -72,7 +72,6 @@ case class Tui() extends TuiInterface {
       //START
       var st: collection.mutable.Map[Int, Spielfigur] = p(sID - 1).getStart().map(_.swap)
       if (st.contains(posID))
-      // TODO option auspacken
         return st.get(posID).get.getFigur()
       else
         return "■ "
@@ -81,7 +80,6 @@ case class Tui() extends TuiInterface {
       //ziel
       var st: collection.mutable.Map[Int, Spielfigur] = p(sID - 1).getZiel().map(_.swap)
       if (st.contains(posID))
-      // TODO option auspacken
         return st.get(posID).get.getFigur()
       else
         return "■ "

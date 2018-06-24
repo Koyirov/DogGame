@@ -1,7 +1,7 @@
 DogGame in Scala
 =========================
 
-This is a project created by Marc Baldishwilie and Shohrukh Koyirov. It is a basic scala project as used in the
+This is a project created by Marc Baldischwieler and Shohrukh Koyirov. It is a basic scala project as used in the
 class Software Engineering at the University of Applied Science HTWG Konstanz<br><br>
 
 DogGame instructions

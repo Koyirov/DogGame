@@ -1,7 +1,7 @@
 DogGame in Scala
 =========================
 
-This is a project created by Marc Baldishwilie and Shohrukh Koyirov. It is a basic 
+This is a project created by Marc Baldischwieler and Shohrukh Koyirov. It is a basic 
 scala project as used in the class Software Engineering at the University of Applied 
 Science HTWG Konstanz
 
@@ -14,7 +14,7 @@ DOG -  Rules of the game
 
 Aim
 ____ 
-The team me mb ers (2 x 2) sit opposite. The object of the game  is to move own men 
+The team members (2 x 2) sit opposite. The object of the game  is to move own men 
 from home to the target area as fast as possible. They are moved in an anticlockwise 
 direction along the course according to the value of the cards. The winning team is 
 the one who has first placed all its 8 me n in the target area. Once a player has set 
