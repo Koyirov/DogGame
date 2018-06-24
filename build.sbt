@@ -3,7 +3,7 @@ organization  := "de.htwg.se"
 version       := "0.2.0"
 scalaVersion  := "2.11.8"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
 libraryDependencies += "junit" % "junit" % "4.8" % "test"
 

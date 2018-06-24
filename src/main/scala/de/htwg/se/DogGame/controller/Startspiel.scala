@@ -261,7 +261,6 @@ class Startspiel @Inject() (var guiBoolean: Boolean) extends StartspielInterface
       var spInterface = injector.getInstance(classOf[Spieler])
       var p1 = spInterface.setSpieler(i, (i - 1) * 16);
       players += p1;
-
     }
   }
 
