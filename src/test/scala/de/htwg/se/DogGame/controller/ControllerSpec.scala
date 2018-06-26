@@ -7,7 +7,9 @@ import main.scala.de.htwg.se.DogGame.controller.Startspiel
 import scala.collection.mutable.ArrayBuffer
 import main.scala.de.htwg.se.DogGame.model.Spieler
 import main.scala.de.htwg.se.DogGame.model.Karten
+import org.scalatest.Ignore
 
+@Ignore
 @RunWith(classOf[JUnitRunner])
 class ControllerSpec extends WordSpec with Matchers {
   "DogGame startSpiel" should {
