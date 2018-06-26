@@ -9,7 +9,7 @@ import main.scala.de.htwg.se.DogGame.model.Spieler
 import main.scala.de.htwg.se.DogGame.model.Karten
 
 @RunWith(classOf[JUnitRunner])
-class TuiSpec extends WordSpec with Matchers {
+class ControllerSpec extends WordSpec with Matchers {
   "DogGame startSpiel" should {
     "not crash" in {
       // add tests when available
