@@ -5,7 +5,7 @@ import org.scalatest.junit.JUnitRunner
 import org.scalatest.{ Matchers, WordSpec }
 
 @RunWith(classOf[JUnitRunner])
-class TuiSpec extends WordSpec with Matchers {
+class ViewSpec extends WordSpec with Matchers {
   "DogGame View" should {
     "not crash" in {
       // add tests when available
